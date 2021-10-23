@@ -1,7 +1,6 @@
 package com.matthias.dreamz.worker
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.matthias.dreamz.repository.DreamRepository
@@ -23,7 +22,7 @@ class TagSyncWorker @AssistedInject constructor(
     }
 
     companion object {
-        val NAME = "TAG_SYNC_WORKER"
+        private const val NAME = "TAG_SYNC_WORKER"
 
         private fun workRequest(): OneTimeWorkRequest {
             return OneTimeWorkRequestBuilder<TagSyncWorker>()

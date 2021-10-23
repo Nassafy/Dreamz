@@ -6,14 +6,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Assignment
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.LocalOffer
+import androidx.compose.material.icons.filled.People
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.AnnotatedString
@@ -110,7 +111,7 @@ fun TagRow(
 
     if (showTagAlertDialog.value) {
         AlertDialog(onDismissRequest = { showTagAlertDialog.value = false }, buttons = {
-            Column() {
+            Column {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -236,7 +237,7 @@ fun Chip(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 @Composable
 private fun annotatedDream(text: String, word: String?): AnnotatedString {
     var start = if (word != null) text.indexOf(word, ignoreCase = true) else -1
-    return buildAnnotatedString() {
+    return buildAnnotatedString {
         append(text)
         while (word != null && word.isNotBlank() && start >= 0) {
             val end = start + word.length

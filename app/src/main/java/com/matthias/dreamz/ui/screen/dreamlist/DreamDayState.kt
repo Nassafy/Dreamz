@@ -1,7 +1,6 @@
 package com.matthias.dreamz.ui.screen.dreamlist
 
 import com.matthias.dreamz.data.model.Dream
-import com.matthias.dreamz.data.model.DreamDay
 import com.matthias.dreamz.data.model.DreamDayWithDream
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

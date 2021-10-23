@@ -3,11 +3,13 @@ package com.matthias.dreamz.ui.screen.dreamlist.widget
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -16,10 +18,10 @@ import com.matthias.dreamz.ui.screen.dreamlist.DreamDayState
 
 @Composable
 fun DreamCard(dreamDay: DreamDayState, modifier: Modifier = Modifier) {
-    val border = if (dreamDay.lucid) BorderStroke(
-        width = 1.dp,
-        color = MaterialTheme.colors.primary
-    ) else null
+//    val border = if (dreamDay.lucid) BorderStroke(
+//        width = 1.dp,
+//        color = MaterialTheme.colors.primary
+//    ) else null
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -33,7 +35,7 @@ fun DreamCard(dreamDay: DreamDayState, modifier: Modifier = Modifier) {
         ) {
             Column {
                 Text(dreamDay.date, style = TextStyle(fontSize = 14.sp))
-                Column() {
+                Column {
                     dreamDay.dreams.forEach {
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,

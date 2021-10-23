@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.matthias.dreamz.data.model.Dream
 import com.matthias.dreamz.repository.DreamRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,13 +16,13 @@ class EditDreamViewModel @Inject constructor(private val dreamRepository: DreamR
 
     fun addDream(dreamDayId: Long) {
         val dream = Dream(dreamDayId = dreamDayId)
-        viewModelScope.launch() {
+        viewModelScope.launch {
             dreamRepository.addDream(dream)
         }
     }
 
     fun saveDream(dream: DreamState) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             val d = dreamRepository.getDream(dream.id)
             if (d != null) {
                 val updated = d.copy(
@@ -40,13 +39,13 @@ class EditDreamViewModel @Inject constructor(private val dreamRepository: DreamR
     }
 
     fun deleteDream(dreamId: Long) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             dreamRepository.deleteDream(dreamId)
         }
     }
 
     fun deleteDreamDay(dreamDayId: Long) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             dreamRepository.deleteDreamDay(dreamDayId)
         }
     }

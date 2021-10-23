@@ -32,7 +32,7 @@ class ViewDreamViewModel @Inject constructor(private val dreamRepository: DreamR
     fun getDreams() = dreamRepository.getDreamDays()
 
     fun saveDreamMetadata(dreamId: Long, metadata: DreamMetadata) {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             val dream = dreamRepository.getDream(dreamId)
             if (dream != null) {
                 dreamRepository.saveDream(dream.copy(dreamMetadata = metadata))

@@ -3,7 +3,6 @@ package com.matthias.dreamz
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.WorkManager
 import com.matthias.dreamz.worker.SyncWorker
 import dagger.hilt.android.HiltAndroidApp

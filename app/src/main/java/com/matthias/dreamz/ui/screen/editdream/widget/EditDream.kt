@@ -44,7 +44,7 @@ fun EditDream(
     val ime = LocalWindowInsets.current.ime
     LaunchedEffect(focused.value) {
         if (ime.isVisible && focused.value) {
-            delay(300L);
+            delay(300L)
             relocationRequester.bringIntoView()
         }
     }

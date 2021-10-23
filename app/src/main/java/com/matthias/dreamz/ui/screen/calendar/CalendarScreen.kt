@@ -47,7 +47,7 @@ fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int) {
             nbDays
     val daysLabel = listOf("L", "M", "M", "J", "V", "S", "D")
     val nbDream = dreams.values.size
-    Column() {
+    Column {
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()

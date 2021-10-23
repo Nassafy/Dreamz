@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
     private val authApi: AuthApi,
     private val dataStoreManager: SettingsDataStoreManager
 ) : ViewModel() {
-    fun authenticate(context: Context) {
+    fun authenticate() {
         authApi.auth(AuthDto(username = "matthias", password = "pass"))
             .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
                 ) {
                     //your raw string response
                     val jwt = response.body()?.string()
-                    viewModelScope.launch() {
+                    viewModelScope.launch {
                         if (jwt != null) {
                             dataStoreManager.writeJwtToken(jwtToken = jwt)
                         }
