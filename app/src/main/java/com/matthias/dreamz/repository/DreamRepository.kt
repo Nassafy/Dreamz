@@ -23,7 +23,7 @@ class DreamRepository @Inject constructor(
     private val tagDao: TagDao,
     private val filterManager: FilterDataStoreManager
 ) {
-    suspend fun getDistantDreamDays(): Flow<List<DreamDayDto>> {
+    private suspend fun getDistantDreamDays(): Flow<List<DreamDayDto>> {
         return flow {
             val dreamDays = dreamApi.getDreams().results
             emit(dreamDays)

@@ -30,7 +30,10 @@ fun ViewDreamScreen(
     val currentDream = dreamDays.firstOrNull { it.uid == dreamId }
     val scrollState = rememberScrollState()
     val index = if (currentDream != null) dreamDays.indexOf(currentDream) else 0
-    val pagerState = rememberPagerState(initialPage = index)
+    val pagerState = when (dreamDays.isEmpty()) {
+        true -> null
+        false -> rememberPagerState(initialPage = index)
+    }
     val peoplesSuggestions =
         viewDreamViewModel.getSuggestions(tagType = TagType.PEOPLE).collectAsState(
             initial = listOf()
@@ -43,7 +46,7 @@ fun ViewDreamScreen(
 
     Scaffold(topBar = {
         TopAppBar(title = {
-            if (dreamDays.isNotEmpty()) {
+            if (dreamDays.isNotEmpty() && pagerState != null) {
                 Text(dreamDays[pagerState.currentPage].toState().date)
             }
         }, actions = {
@@ -56,30 +59,32 @@ fun ViewDreamScreen(
         })
     }) {
         Column(modifier = Modifier.fillMaxHeight()) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .verticalScroll(scrollState),
-                verticalAlignment = Alignment.Top,
-                count = dreamDays.size,
-            ) { page ->
-                val dreamDay = viewDreamViewModel.getDream(dreamDays[page].uid)
-                    .collectAsState(initial = null).value
-                Column {
-                    dreamDay?.dreams?.forEach { dreamState ->
-                        DreamView(
-                            dream = dreamState, saveMetadata = {
-                                viewDreamViewModel.saveDreamMetadata(
-                                    dreamId = dreamState.id,
-                                    metadata = it
-                                )
-                            },
-                            tagsSuggestions = tagsSuggestions,
-                            peoplesSuggestions = peoplesSuggestions,
-                            searchText = searchText
-                        )
-                    }
+            if (pagerState != null) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .verticalScroll(scrollState),
+                    verticalAlignment = Alignment.Top,
+                    count = dreamDays.size,
+                ) { page ->
+                    val dreamDay = viewDreamViewModel.getDream(dreamDays[page].uid)
+                        .collectAsState(initial = null).value
+                    Column {
+                        dreamDay?.dreams?.forEach { dreamState ->
+                            DreamView(
+                                dream = dreamState, saveMetadata = {
+                                    viewDreamViewModel.saveDreamMetadata(
+                                        dreamId = dreamState.id,
+                                        metadata = it
+                                    )
+                                },
+                                tagsSuggestions = tagsSuggestions,
+                                peoplesSuggestions = peoplesSuggestions,
+                                searchText = searchText
+                            )
+                        }
 
+                    }
                 }
             }
         }

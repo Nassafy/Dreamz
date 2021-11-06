@@ -1,27 +1,35 @@
 package com.matthias.dreamz.worker
 
 import android.content.Context
+import android.widget.Toast
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.matthias.dreamz.repository.AuthRepository
 import com.matthias.dreamz.repository.DreamRepository
 import com.matthias.dreamz.repository.TagInfoRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.first
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
-    @Assisted context: Context,
+    @Assisted private val context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val dreamRepository: DreamRepository,
-    private val tagInfoRepository: TagInfoRepository
+    private val tagInfoRepository: TagInfoRepository,
+    private val authRepository: AuthRepository
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun doWork(): Result {
         try {
-            dreamRepository.syncDream()
+            val logged = authRepository.logged.first()
+            if (logged) {
+                dreamRepository.syncDream()
+            }
             dreamRepository.syncTags()
             tagInfoRepository.reindexTagInfo()
         } catch (error: Exception) {
+            Toast.makeText(context, "Sync failed", Toast.LENGTH_SHORT).show()
             return Result.failure()
         }
         return Result.success()

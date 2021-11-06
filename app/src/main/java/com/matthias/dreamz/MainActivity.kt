@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +32,8 @@ import com.matthias.dreamz.ui.screen.editdream.EditDreamScreen
 import com.matthias.dreamz.ui.screen.editdream.EditDreamViewModel
 import com.matthias.dreamz.ui.screen.graph.GraphScreen
 import com.matthias.dreamz.ui.screen.graph.GraphViewModel
+import com.matthias.dreamz.ui.screen.login.LoginScreen
+import com.matthias.dreamz.ui.screen.login.LoginViewModel
 import com.matthias.dreamz.ui.screen.tags.TagsScreen
 import com.matthias.dreamz.ui.screen.tags.TagsViewModel
 import com.matthias.dreamz.ui.screen.viewdream.ViewDreamScreen
@@ -49,7 +52,7 @@ class MainActivity : ComponentActivity() {
         window.statusBarColor = getColor(android.R.color.system_accent1_500)
         setContent {
             val mainViewModel = hiltViewModel<MainViewModel>()
-            mainViewModel.authenticate(this)
+            val logged = mainViewModel.logged.collectAsState(initial = true).value
             val navController = rememberAnimatedNavController()
             DreamzTheme {
                 ProvideWindowInsets {
@@ -104,21 +107,39 @@ class MainActivity : ComponentActivity() {
                             }
                             dreamzComposable(Screen.Peoples.route) {
                                 val tagsViewModel: TagsViewModel = hiltViewModel()
-                                TagsScreen(tagsViewModel = tagsViewModel, tagType = TagType.PEOPLE, navController = navController)
+                                TagsScreen(
+                                    tagsViewModel = tagsViewModel,
+                                    tagType = TagType.PEOPLE,
+                                    navController = navController
+                                )
                             }
                             dreamzComposable(Screen.Tags.route) {
                                 val tagsViewModel: TagsViewModel = hiltViewModel()
-                                TagsScreen(tagsViewModel = tagsViewModel, tagType = TagType.TAG, navController = navController)
+                                TagsScreen(
+                                    tagsViewModel = tagsViewModel,
+                                    tagType = TagType.TAG,
+                                    navController = navController
+                                )
                             }
                             dreamzComposable(Screen.Graph.route) {
                                 val graphViewModel: GraphViewModel = hiltViewModel()
                                 GraphScreen(graphViewModel = graphViewModel)
+                            }
+                            dreamzComposable(Screen.Login.route) {
+                                val loginViewModel: LoginViewModel = hiltViewModel()
+                                LoginScreen(
+                                    loginViewModel = loginViewModel,
+                                    navController = navController
+                                )
                             }
 
                         }
                     }
 
                 }
+            }
+            if (!logged) {
+                navController.navigate(Screen.Login.route)
             }
         }
     }
@@ -129,11 +150,12 @@ class MainActivity : ComponentActivity() {
         content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
     ) {
         val duration = 250
-        composable(route, arguments = arguments, enterTransition = { initial, _ ->
-            fadeIn(
-                animationSpec = tween(duration)
-            )
-        },
+        composable(
+            route, arguments = arguments, enterTransition = { initial, _ ->
+                fadeIn(
+                    animationSpec = tween(duration)
+                )
+            },
             exitTransition = { _, target ->
                 fadeOut(
                     animationSpec = tween(50)

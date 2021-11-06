@@ -20,6 +20,8 @@ sealed class Screen(val route: String) {
 
     object Tags : Screen("tags")
 
-    object Graph: Screen("Graphs")
+    object Graph: Screen("graph")
+
+    object Login: Screen("login")
 
 }
