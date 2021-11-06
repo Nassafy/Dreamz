@@ -61,8 +61,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        // val baseUrl = "https://dreamz-gapi-ybbln.ondigitalocean.app"
-        val baseUrl = "http://192.168.0.15:8080"
+        val baseUrl = "https://dreamz-gapi-ybbln.ondigitalocean.app"
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
             .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
             .registerTypeAdapter(Instant::class.java, InstantAdapter().nullSafe())
