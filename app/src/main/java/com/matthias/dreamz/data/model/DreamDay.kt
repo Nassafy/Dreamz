@@ -3,9 +3,8 @@ package com.matthias.dreamz.data.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
+import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -14,11 +13,9 @@ data class DreamDay(
     val id: String = UUID.randomUUID().toString(),
     val date: LocalDate,
     @Embedded(prefix = "tech")
-    val technicalMetadata: TechnicalMetadata = TechnicalMetadata()
+    val technicalMetadata: TechnicalMetadata = TechnicalMetadata(lastChange = Instant.now())
 )
 
-@Entity
 data class TechnicalMetadata(
-    @PrimaryKey(autoGenerate = true) val uid: Long = 0,
-    val lastChange: LocalDateTime? = null
+    val lastChange: Instant
 )

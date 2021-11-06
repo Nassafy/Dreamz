@@ -1,7 +1,7 @@
 package com.matthias.dreamz.worker
 
 import android.content.Context
-import android.widget.Toast
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.matthias.dreamz.repository.AuthRepository
@@ -29,7 +29,7 @@ class SyncWorker @AssistedInject constructor(
             dreamRepository.syncTags()
             tagInfoRepository.reindexTagInfo()
         } catch (error: Exception) {
-            Toast.makeText(context, "Sync failed", Toast.LENGTH_SHORT).show()
+            Log.d("Dreamz sync", error.message ?: "Error during Sync")
             return Result.failure()
         }
         return Result.success()

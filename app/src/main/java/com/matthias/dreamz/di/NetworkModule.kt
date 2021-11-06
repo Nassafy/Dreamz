@@ -20,8 +20,10 @@ import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Singleton
 
@@ -59,11 +61,11 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val baseUrl = "https://dreamz-gapi-ybbln.ondigitalocean.app"
-
+        // val baseUrl = "https://dreamz-gapi-ybbln.ondigitalocean.app"
+        val baseUrl = "http://192.168.0.15:8080"
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
             .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-            .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeAdapter().nullSafe())
+            .registerTypeAdapter(Instant::class.java, InstantAdapter().nullSafe())
             .create()
 
         return Retrofit.Builder()
@@ -105,17 +107,18 @@ private class LocalDateAdapter : TypeAdapter<LocalDate?>() {
     }
 }
 
-private class LocalDateTimeAdapter : TypeAdapter<LocalDateTime?>() {
-    override fun write(jsonWriter: JsonWriter, localDate: LocalDateTime?) {
-        if (localDate == null) {
+private class InstantAdapter : TypeAdapter<Instant?>() {
+    override fun write(jsonWriter: JsonWriter, instant: Instant?) {
+        if (instant == null) {
             jsonWriter.nullValue()
         } else {
             val format = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            val localDate: LocalDateTime = LocalDateTime.from(instant.atOffset(ZoneOffset.UTC))
             jsonWriter.value(localDate.format(DateTimeFormatter.ofPattern(format)))
         }
     }
 
-    override fun read(jsonReader: JsonReader): LocalDateTime? {
+    override fun read(jsonReader: JsonReader): Instant? {
         return if (jsonReader.peek() === JsonToken.NULL) {
             jsonReader.nextNull()
             null
@@ -129,7 +132,7 @@ private class LocalDateTimeAdapter : TypeAdapter<LocalDateTime?>() {
 
             LocalDateTime.parse(
                 dateStr, DateTimeFormatter.ofPattern(format)
-            )
+            ).toInstant(ZoneOffset.UTC)
         }
     }
 }

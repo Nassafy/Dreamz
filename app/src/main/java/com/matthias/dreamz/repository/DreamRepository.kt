@@ -10,10 +10,7 @@ import com.matthias.dreamz.datastore.FilterDataStoreManager
 import com.matthias.dreamz.toDto
 import com.matthias.dreamz.toModel
 import kotlinx.coroutines.flow.*
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
+import java.time.*
 import javax.inject.Inject
 
 class DreamRepository @Inject constructor(
@@ -96,7 +93,7 @@ class DreamRepository @Inject constructor(
                     dreamDayDao.updateDreamDay(
                         it.copy(
                             technicalMetadata = it.technicalMetadata.copy(
-                                lastChange = LocalDateTime.now()
+                                lastChange = Instant.now()
                             )
                         )
                     )
@@ -117,8 +114,8 @@ class DreamRepository @Inject constructor(
             distants.forEach { distant ->
                 val local = locals.find { it.dreamDay.id == distant.id }
                 if (local == null || Duration.between(
-                        local.dreamDay.technicalMetadata.lastChange?.toInstant(OffsetDateTime.now().offset),
-                        distant.techMetadata.lastChange?.toInstant(OffsetDateTime.now().offset),
+                        local.dreamDay.technicalMetadata.lastChange,
+                        distant.techMetadata.lastChange,
                     ).seconds > 5
                 ) {
                     local?.dreamDay?.let { dreamDayDao.deleteDreamDay(it.uid) }
@@ -132,8 +129,8 @@ class DreamRepository @Inject constructor(
             locals.forEach { local ->
                 val distant = distants.find { it.id == local.dreamDay.id }
                 if (distant == null || Duration.between(
-                        distant.techMetadata.lastChange?.toInstant(OffsetDateTime.now().offset),
-                        local.dreamDay.technicalMetadata.lastChange?.toInstant(OffsetDateTime.now().offset)
+                        distant.techMetadata.lastChange,
+                        local.dreamDay.technicalMetadata.lastChange
                     ).seconds > 5
                 ) {
                     dreamApi.saveDream(local.toDto())
