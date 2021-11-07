@@ -8,10 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Sync
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,6 +51,7 @@ fun DreamsListScreen(
         dreamListViewModel.getSuggestions(TagType.PEOPLE).collectAsState(initial = listOf()).value
     val filterPeople = dreamListViewModel.filterPeople.collectAsState(initial = "").value
 
+    val syncState = dreamListViewModel.syncState.collectAsState(initial = true).value
 
     Scaffold(
         topBar = {
@@ -76,6 +74,9 @@ fun DreamsListScreen(
                     IconButton(onClick = { dreamListViewModel.sync() }) {
                         Icon(Icons.Default.Sync, contentDescription = "Sync")
                     }
+                }
+                if(!syncState) {
+                    Icon(Icons.Default.SyncDisabled, contentDescription = "Sync failed")
                 }
                 Chip {
                     Text("${dreamDays?.size ?: 0}")

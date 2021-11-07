@@ -1,5 +1,6 @@
 package com.matthias.dreamz.ui.screen.dreamlist
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations.map
@@ -10,6 +11,7 @@ import com.matthias.dreamz.data.model.Dream
 import com.matthias.dreamz.data.model.DreamDay
 import com.matthias.dreamz.data.model.TagType
 import com.matthias.dreamz.datastore.FilterDataStoreManager
+import com.matthias.dreamz.datastore.FlagDataStoreManager
 import com.matthias.dreamz.repository.DreamRepository
 import com.matthias.dreamz.worker.SyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +25,8 @@ import javax.inject.Inject
 class DreamListViewModel @Inject constructor(
     private val dreamRepository: DreamRepository,
     private val filterDataStoreManager: FilterDataStoreManager,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    flagDataStoreManager: FlagDataStoreManager
 ) :
     ViewModel() {
     val dreamDays =
@@ -34,6 +37,8 @@ class DreamListViewModel @Inject constructor(
     val todayDream = dreamRepository.getTodayDreamDay()
 
     val refreshing = isRefreshing()
+
+    val syncState = flagDataStoreManager.syncState
 
     fun addDream(onAdd: (dreamDayId: Long) -> Unit) {
         viewModelScope.launch {

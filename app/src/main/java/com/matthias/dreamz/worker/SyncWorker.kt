@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.matthias.dreamz.datastore.FlagDataStoreManager
 import com.matthias.dreamz.repository.AuthRepository
 import com.matthias.dreamz.repository.DreamRepository
 import com.matthias.dreamz.repository.TagInfoRepository
@@ -18,7 +19,8 @@ class SyncWorker @AssistedInject constructor(
     @Assisted workerParameters: WorkerParameters,
     private val dreamRepository: DreamRepository,
     private val tagInfoRepository: TagInfoRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val flagDataStoreManager: FlagDataStoreManager
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun doWork(): Result {
         try {
@@ -28,8 +30,10 @@ class SyncWorker @AssistedInject constructor(
             }
             dreamRepository.syncTags()
             tagInfoRepository.reindexTagInfo()
+            flagDataStoreManager.setSyncState(true)
         } catch (error: Exception) {
             Log.d("Dreamz sync", error.message ?: "Error during Sync")
+            flagDataStoreManager.setSyncState(false)
             return Result.failure()
         }
         return Result.success()

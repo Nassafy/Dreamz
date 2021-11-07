@@ -2,6 +2,7 @@ package com.matthias.dreamz.di
 
 import android.content.Context
 import com.matthias.dreamz.datastore.FilterDataStoreManager
+import com.matthias.dreamz.datastore.FlagDataStoreManager
 import com.matthias.dreamz.datastore.SettingsDataStoreManager
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,11 @@ class DataStoreModule {
     @Singleton
     fun provideFilterDataStoreManager(@ApplicationContext context: Context): FilterDataStoreManager {
         return FilterDataStoreManager(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFlagDataStoreManager(@ApplicationContext context: Context): FlagDataStoreManager {
+        return FlagDataStoreManager(context)
     }
 }
