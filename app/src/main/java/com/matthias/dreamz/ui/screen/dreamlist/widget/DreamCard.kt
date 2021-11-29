@@ -1,6 +1,5 @@
 package com.matthias.dreamz.ui.screen.dreamlist.widget
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card

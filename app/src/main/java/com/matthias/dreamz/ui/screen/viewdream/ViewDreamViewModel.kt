@@ -1,6 +1,5 @@
 package com.matthias.dreamz.ui.screen.viewdream
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +17,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewDreamViewModel @Inject constructor(private val dreamRepository: DreamRepository, filterDataStoreManager: FilterDataStoreManager, private val workManager: WorkManager) :
+class ViewDreamViewModel @Inject constructor(
+    private val dreamRepository: DreamRepository,
+    filterDataStoreManager: FilterDataStoreManager,
+    private val workManager: WorkManager
+) :
     ViewModel() {
 
     private val title = mutableStateOf("")

@@ -1,6 +1,5 @@
 package com.matthias.dreamz.ui.screen.dreamlist
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations.map

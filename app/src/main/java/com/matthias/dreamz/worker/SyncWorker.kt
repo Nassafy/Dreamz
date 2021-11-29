@@ -15,12 +15,12 @@ import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
-    @Assisted private val context: Context,
-    @Assisted workerParameters: WorkerParameters,
-    private val dreamRepository: DreamRepository,
-    private val tagInfoRepository: TagInfoRepository,
-    private val authRepository: AuthRepository,
-    private val flagDataStoreManager: FlagDataStoreManager
+        @Assisted private val context: Context,
+        @Assisted workerParameters: WorkerParameters,
+        private val dreamRepository: DreamRepository,
+        private val tagInfoRepository: TagInfoRepository,
+        private val authRepository: AuthRepository,
+        private val flagDataStoreManager: FlagDataStoreManager
 ) : CoroutineWorker(context, workerParameters) {
     override suspend fun doWork(): Result {
         try {
@@ -46,18 +46,18 @@ class SyncWorker @AssistedInject constructor(
 
         private fun workRequest(): PeriodicWorkRequest {
             val constraints =
-                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                    Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
             return PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS).setConstraints(
-                constraints
+                    constraints
             )
-                .build()
+                    .build()
         }
 
         fun launch(workManager: WorkManager): Operation {
             return workManager.enqueueUniquePeriodicWork(
-                NAME_PERIODIC,
-                ExistingPeriodicWorkPolicy.KEEP,
-                workRequest()
+                    NAME_PERIODIC,
+                    ExistingPeriodicWorkPolicy.KEEP,
+                    workRequest()
             )
         }
     }

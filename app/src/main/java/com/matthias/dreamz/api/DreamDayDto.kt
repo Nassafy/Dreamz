@@ -3,8 +3,6 @@ package com.matthias.dreamz.api
 import com.google.gson.annotations.SerializedName
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.*
 
 
 data class DreamDayDto(

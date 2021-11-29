@@ -16,7 +16,7 @@ class FilterDataStoreManager(@ApplicationContext val context: Context) {
     private val textKey = stringPreferencesKey("text")
     private val tagKey = stringPreferencesKey("tag")
     private val peopleKey = stringPreferencesKey("people")
-    
+
     val text: Flow<String?> = context.filtersDataStore.data.map { it[textKey] }
 
     suspend fun setText(text: String) {

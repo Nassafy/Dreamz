@@ -43,7 +43,7 @@ fun DreamSearch(
     var peopleSearch by rememberSaveable {
         mutableStateOf(filterPeople ?: "")
     }
-    
+
     if (filterText?.isNotBlank() == true) {
         Chip {
             Row {
@@ -118,7 +118,7 @@ fun DreamSearch(
                 AutocompleteTextField(
                     text = tagSearch,
                     onChangeText = { tagSearch = it },
-                    onSelectSuggestion = {tagSearch = it},
+                    onSelectSuggestion = { tagSearch = it },
                     suggestions = tags,
                     label = {
                         Text(text = "Tag")
@@ -128,7 +128,7 @@ fun DreamSearch(
                 AutocompleteTextField(
                     text = peopleSearch,
                     onChangeText = { peopleSearch = it },
-                    onSelectSuggestion = {peopleSearch = it},
+                    onSelectSuggestion = { peopleSearch = it },
                     suggestions = peoples,
                     label = {
                         Text(text = "People")

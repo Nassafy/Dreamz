@@ -1,16 +1,13 @@
 package com.matthias.dreamz.repository
 
-import androidx.lifecycle.viewModelScope
 import com.matthias.dreamz.api.AuthApi
 import com.matthias.dreamz.api.AuthDto
 import com.matthias.dreamz.datastore.SettingsDataStoreManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import retrofit2.*
+import retrofit2.HttpException
+import retrofit2.await
 import javax.inject.Inject
 
 

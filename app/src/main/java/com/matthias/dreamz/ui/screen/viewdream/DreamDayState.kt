@@ -48,5 +48,6 @@ internal fun DreamDay.toState(): BaseDreamDayState {
         this.date
     return BaseDreamDayState(
         id = this.uid,
-        date = date.format(dateFormatter))
+        date = date.format(dateFormatter)
+    )
 }

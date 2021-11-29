@@ -24,7 +24,7 @@ fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: Na
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = tagName) })
     }) {
-        Surface(elevation = 5.dp,modifier = Modifier.fillMaxSize()) {
+        Surface(elevation = 5.dp, modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)

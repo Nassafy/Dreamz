@@ -75,7 +75,7 @@ fun DreamsListScreen(
                         Icon(Icons.Default.Sync, contentDescription = "Sync")
                     }
                 }
-                if(!syncState) {
+                if (!syncState) {
                     Icon(Icons.Default.SyncDisabled, contentDescription = "Sync failed")
                 }
                 Chip {

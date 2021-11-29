@@ -65,7 +65,8 @@ fun EditDream(
                 3.dp,
                 if (!focused.value) Color.DarkGray else MaterialTheme.colors.primary,
                 shape = RoundedCornerShape(10.dp),
-            ).clip(RoundedCornerShape(10.dp)),
+            )
+            .clip(RoundedCornerShape(10.dp)),
         elevation = 1.dp
 
     ) {

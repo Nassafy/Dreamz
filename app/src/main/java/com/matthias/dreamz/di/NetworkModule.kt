@@ -7,7 +7,6 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.matthias.dreamz.datastore.SettingsDataStoreManager
-import com.matthias.dreamz.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,27 +34,27 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        settingsDataStoreManager: SettingsDataStoreManager,
-        @ApplicationContext context: Context
+            settingsDataStoreManager: SettingsDataStoreManager,
+            @ApplicationContext context: Context
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor {
-                val original = it.request()
-                var newRequest: Request? = null
-                runBlocking {
-                    try {
-                        val jwt = settingsDataStoreManager.getJwtToken().first()
-                        newRequest =
-                            it.request().newBuilder().addHeader("Authorization", "Bearer $jwt")
-                                .build()
-                    } catch (error: Exception) {
-                        print(error)
+                .addInterceptor {
+                    val original = it.request()
+                    var newRequest: Request? = null
+                    runBlocking {
+                        try {
+                            val jwt = settingsDataStoreManager.getJwtToken().first()
+                            newRequest =
+                                    it.request().newBuilder().addHeader("Authorization", "Bearer $jwt")
+                                            .build()
+                        } catch (error: Exception) {
+                            print(error)
+                        }
                     }
+                    val resp = it.proceed(newRequest ?: original)
+                    resp
                 }
-                val resp = it.proceed(newRequest ?: original)
-                resp
-            }
-            .build()
+                .build()
     }
 
     @Provides
@@ -63,17 +62,17 @@ class NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val baseUrl = "https://dreamz-gapi-ybbln.ondigitalocean.app"
         val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-            .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
-            .registerTypeAdapter(Instant::class.java, InstantAdapter().nullSafe())
-            .create()
+                .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter().nullSafe())
+                .registerTypeAdapter(Instant::class.java, InstantAdapter().nullSafe())
+                .create()
 
         return Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl(baseUrl)
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl(baseUrl)
-            .build()
+                .client(okHttpClient)
+                .baseUrl(baseUrl)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .baseUrl(baseUrl)
+                .build()
     }
 }
 
@@ -94,13 +93,13 @@ private class LocalDateAdapter : TypeAdapter<LocalDate?>() {
         } else {
             val dateStr = jsonReader.nextString()
             val format =
-                if (dateStr.length == 20)
-                    "yyyy-MM-dd'T'HH:mm:ss'Z'"
-                else
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                    if (dateStr.length == 20)
+                        "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    else
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
             LocalDate.parse(
-                dateStr, DateTimeFormatter.ofPattern(format)
+                    dateStr, DateTimeFormatter.ofPattern(format)
             )
         }
     }
@@ -124,13 +123,13 @@ private class InstantAdapter : TypeAdapter<Instant?>() {
         } else {
             val dateStr = jsonReader.nextString()
             val format =
-                if (dateStr.length == 20)
-                    "yyyy-MM-dd'T'HH:mm:ss'Z'"
-                else
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                    if (dateStr.length == 20)
+                        "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    else
+                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
             LocalDateTime.parse(
-                dateStr, DateTimeFormatter.ofPattern(format)
+                    dateStr, DateTimeFormatter.ofPattern(format)
             ).toInstant(ZoneOffset.UTC)
         }
     }
