@@ -28,6 +28,7 @@ class EditDreamViewModel @Inject constructor(private val dreamRepository: DreamR
                 val updated = d.copy(
                     text = dream.text,
                     name = dream.name,
+                    textNote = dream.textNote,
                     dreamMetadata = d.dreamMetadata.copy(lucid = dream.lucid)
                 )
                 if (updated != d) {

@@ -11,6 +11,7 @@ data class Dream(
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
     val text: String = "",
+    val textNote: String? = null,
     val dreamDayId: Long,
     @Embedded
     val dreamMetadata: DreamMetadata = DreamMetadata(),

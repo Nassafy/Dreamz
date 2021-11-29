@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -19,6 +20,7 @@ import com.matthias.dreamz.data.model.TagType
 import com.matthias.dreamz.ui.screen.Screen
 import com.matthias.dreamz.ui.screen.viewdream.widget.DreamView
 
+@ExperimentalComposeUiApi
 @ExperimentalPagerApi
 @Composable
 fun ViewDreamScreen(

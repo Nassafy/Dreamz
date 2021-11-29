@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -55,7 +56,12 @@ fun EditDream(
     val content = rememberSaveable(dream) {
         mutableStateOf(dream.text)
     }
-
+    val textNote = rememberSaveable(dream) {
+        mutableStateOf(dream.textNote)
+    }
+    val showNote = rememberSaveable {
+        mutableStateOf(textNote.value?.isNotEmpty() ?: false)
+    }
 
     Surface(
         modifier = Modifier
@@ -142,11 +148,42 @@ fun EditDream(
                 ) {
                     Text("Lucid")
                 }
-                if (title.value.isEmpty() && content.value.isEmpty()) {
+                IconButton(onClick = { showNote.value = !showNote.value }) {
+                    Icon(Icons.Default.Edit, contentDescription = "Edit note")
+                }
+
+                if (title.value.isEmpty() && content.value.isEmpty() && textNote.value?.isEmpty() == true) {
 
                     IconButton(onClick = { delete(dream.id) }) {
                         Icon(Icons.Default.Delete, contentDescription = "delete")
                     }
+                }
+            }
+            if (showNote.value) {
+                Surface(
+                    elevation = 3.dp, modifier = Modifier.clip(RoundedCornerShape(10.dp))
+                ) {
+                    BasicTextField(
+                        value = textNote.value ?: "",
+                        onValueChange = {
+                            textNote.value = it
+                        },
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colors.onBackground.copy(alpha = 0.8f),
+                            fontSize = 16.sp
+                        ),
+                        cursorBrush = linear,
+                        interactionSource = interactionSource,
+                        modifier = Modifier
+                            .heightIn(min = 100.dp, max = Dp.Infinity)
+                            .fillMaxWidth()
+                            .padding(3.dp)
+                            .onFocusChanged {
+                                if (!it.isFocused) {
+                                    save(dream.copy(textNote = textNote.value))
+                                }
+                            },
+                    )
                 }
             }
         }

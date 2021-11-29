@@ -10,6 +10,8 @@ data class DreamDto(
     val name: String,
     @SerializedName("text")
     val text: String,
+    @SerializedName("textNote")
+    val textNote: String?,
     @SerializedName("dreamMetadata")
     val dreamMetadata: DreamMetadataDto = DreamMetadataDto()
 )

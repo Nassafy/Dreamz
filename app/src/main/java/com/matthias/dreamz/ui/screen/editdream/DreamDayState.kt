@@ -9,12 +9,19 @@ import java.util.*
 
 data class DreamDayState(val date: String, val dreams: List<DreamState>, val id: Long)
 
-data class DreamState(val name: String, val text: String, val id: Long, val lucid: Boolean = false)
+data class DreamState(
+    val name: String,
+    val text: String,
+    val textNote: String?,
+    val id: Long,
+    val lucid: Boolean = false
+)
 
 internal fun Dream.toState(): DreamState {
     return DreamState(
         name = this.name,
         text = this.text,
+        textNote = this.textNote,
         id = this.uid,
         lucid = this.dreamMetadata.lucid
     )

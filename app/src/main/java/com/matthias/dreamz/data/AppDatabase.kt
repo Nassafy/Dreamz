@@ -20,7 +20,7 @@ import com.matthias.dreamz.data.model.TagInfo
         Dream::class,
         Tag::class,
         TagInfo::class
-    ], version = 7
+    ], version = 8
 )
 @TypeConverters(
     LocalDateConverter::class,

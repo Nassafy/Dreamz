@@ -6,17 +6,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Assignment
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.LocalOffer
-import androidx.compose.material.icons.filled.People
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.RelocationRequester
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -29,6 +26,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.matthias.dreamz.data.model.DreamMetadata
 import com.matthias.dreamz.ui.screen.viewdream.DreamState
 import com.matthias.dreamz.ui.widget.AutocompleteTextField
+
 
 @Composable
 fun DreamView(
@@ -87,7 +85,6 @@ fun DreamView(
                 },
                 suggestions = peoplesSuggestions
             )
-
         }
     }
 }
