@@ -13,13 +13,14 @@ data class DreamDayState(val date: String, val dreams: List<DreamState>, val id:
 
 data class BaseDreamDayState(val date: String, val id: Long)
 
-data class DreamState(val name: String, val text: String, val id: Long, val metadata: DreamMetadata)
+data class DreamState(val name: String, val text: String, val id: Long, val textNote: String?, val metadata: DreamMetadata)
 
 internal fun Dream.toState(): DreamState {
     return DreamState(
         name = this.name,
         text = this.text,
         id = this.uid,
+        textNote = this.textNote,
         metadata = this.dreamMetadata
     )
 }
