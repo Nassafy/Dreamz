@@ -119,10 +119,9 @@ fun DreamsListScreen(
                             Screen.EditDream.createRoute(
                                 todayDream.uid
                             )
-
                         )
                     }) {
-                    Icon(Icons.Default.Edit, contentDescription = "Add")
+                    Icon(Icons.Default.Edit, contentDescription = "Edit")
                 }
             }
 
