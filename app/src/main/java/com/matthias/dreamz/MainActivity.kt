@@ -103,7 +103,10 @@ class MainActivity : ComponentActivity() {
                             }
                             dreamzComposable(Screen.Calendar.route) {
                                 val calendarViewModel: CalendarViewModel = hiltViewModel()
-                                CalendarScreen(calendarViewModel = calendarViewModel)
+                                CalendarScreen(
+                                    calendarViewModel = calendarViewModel,
+                                    navController = navController
+                                )
                             }
                             dreamzComposable(Screen.Peoples.route) {
                                 val tagsViewModel: TagsViewModel = hiltViewModel()

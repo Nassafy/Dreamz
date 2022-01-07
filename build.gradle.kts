@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    val compose_version by extra("1.0.4")
+    val compose_version by extra("1.0.5")
     val hilt_version by extra("2.39.1")
 
     repositories {

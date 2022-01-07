@@ -68,22 +68,22 @@ android {
 }
 
 dependencies {
-    val nav_compose_version = "2.4.0-alpha10"
-    val room_version = "2.3.0"
-    val hilt_version = "2.39.1"
-    val hilt_navigation_compose_version = "1.0.0-alpha03"
+    val nav_compose_version = "2.4.0-rc01"
+    val room_version = "2.4.0"
+    val hilt_version = "2.40.5"
+    val hilt_navigation_compose_version = "1.0.0-rc01"
     val retrofit_version = "2.9.0"
-    val accompanist_version = "0.20.0"
-    val work_version = "2.7.0"
+    val accompanist_version = "0.20.3"
+    val work_version = "2.7.1"
 
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("com.google.android.material:material:1.4.0")
     implementation("androidx.compose.ui:ui:${rootProject.extra["compose_version"]}")
     implementation("androidx.compose.material:material:${rootProject.extra["compose_version"]}")
     implementation("androidx.compose.ui:ui-tooling:${rootProject.extra["compose_version"]}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.activity:activity-compose:1.3.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation("androidx.activity:activity-compose:1.4.0")
     implementation("androidx.navigation:navigation-compose:$nav_compose_version")
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
@@ -100,7 +100,7 @@ dependencies {
 
     implementation("com.squareup.retrofit2:retrofit:${retrofit_version}")
     implementation("com.squareup.retrofit2:converter-gson:${retrofit_version}")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
 
     implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
     // If using insets-ui

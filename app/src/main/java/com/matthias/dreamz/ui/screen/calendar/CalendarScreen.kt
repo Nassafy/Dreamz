@@ -1,5 +1,6 @@
 package com.matthias.dreamz.ui.screen.calendar
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -10,27 +11,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.matthias.dreamz.data.model.DreamDay
+import com.matthias.dreamz.ui.screen.Screen
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @ExperimentalPagerApi
 @Composable()
-fun CalendarScreen(calendarViewModel: CalendarViewModel) {
+fun CalendarScreen(calendarViewModel: CalendarViewModel, navController: NavController) {
     val pagerState = rememberPagerState(initialPage = Int.MAX_VALUE - 1)
 
     Scaffold(topBar = { TopAppBar(title = { Text("Calendar") }) }) {
         HorizontalPager(state = pagerState, count = Int.MAX_VALUE) { page ->
-            Calendar(calendarViewModel = calendarViewModel, monthOffset = Int.MAX_VALUE - 1 - page)
+            Calendar(
+                calendarViewModel = calendarViewModel,
+                monthOffset = Int.MAX_VALUE - 1 - page,
+                onClick = { dreamDay ->
+                    if (dreamDay != null) {
+                        navController.navigate(Screen.ViewDream.createRoute(dreamDay.uid))
+                    }
+                })
 
         }
     }
 }
 
 @Composable()
-fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int) {
+fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int, onClick: (DreamDay?) -> Unit) {
     val pageDate = LocalDate.now().minusMonths(monthOffset.toLong())
 
     val dreams =
@@ -76,21 +87,24 @@ fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int) {
             ) {
                 for (j in 0..6) {
                     val day = i * 7 + j - (firstDayOfWeek - 1)
+                    val dream =
+                        dreams[firstDay.plusDays(day.toLong() - 1)]
+
                     if (day <= 0 || day > nbDays) {
-                        CalendarDay("N", DayState.INACTIVE)
+                        CalendarDay("N", DayState.INACTIVE, onClick = {})
                     } else {
                         val state =
                             if (day <= currentDay) {
-                                val dream =
-                                    dreams[firstDay.plusDays(day.toLong() - 1)]
                                 if (dream != null)
-                                    DayState.LUCID
+                                    DayState.DREAM
                                 else
                                     DayState.ACTIVE
                             } else {
                                 DayState.FUTURE
                             }
-                        CalendarDay("$day", state)
+                        CalendarDay("$day", state, onClick = {
+                            onClick(dream)
+                        })
                     }
                 }
             }
@@ -101,16 +115,16 @@ fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int) {
 }
 
 @Composable
-fun CalendarDay(text: String, state: DayState) {
+fun CalendarDay(text: String, state: DayState, onClick: () -> Unit) {
     val elevation = 15.dp
 
     val color = when (state) {
         DayState.INACTIVE -> MaterialTheme.colors.background.copy(alpha = 0f)
         DayState.FUTURE, DayState.ACTIVE -> MaterialTheme.colors.background
-        DayState.LUCID -> MaterialTheme.colors.primary
+        DayState.DREAM -> MaterialTheme.colors.primary
     }
     val alpha = when (state) {
-        DayState.ACTIVE, DayState.LUCID -> 1f
+        DayState.ACTIVE, DayState.DREAM -> 1f
         DayState.FUTURE -> 0.4f
         DayState.INACTIVE -> 0f
     }
@@ -119,7 +133,13 @@ fun CalendarDay(text: String, state: DayState) {
             color = color,
             elevation = elevation,
             shape = CircleShape,
-            modifier = Modifier.size(40.dp),
+            modifier = Modifier
+                .size(40.dp)
+                .clickable(
+                    enabled = state == DayState.DREAM,
+                    onClick = {
+                        onClick()
+                    }),
             contentColor = MaterialTheme.colors.onBackground,
         ) {
             Column(
@@ -136,5 +156,5 @@ enum class DayState {
     INACTIVE,
     FUTURE,
     ACTIVE,
-    LUCID
+    DREAM
 }
