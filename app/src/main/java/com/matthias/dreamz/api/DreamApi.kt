@@ -1,8 +1,7 @@
 package com.matthias.dreamz.api
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.Response
+import retrofit2.http.*
 
 interface DreamApi {
     @GET("dream")
@@ -10,4 +9,7 @@ interface DreamApi {
 
     @POST("dream")
     suspend fun saveDream(@Body dream: DreamDayDto): DreamDayDto
+
+    @DELETE("dream/{dreamId}")
+    suspend fun deleteDream(@Path("dreamId") dreamId: String): Response<Unit>
 }

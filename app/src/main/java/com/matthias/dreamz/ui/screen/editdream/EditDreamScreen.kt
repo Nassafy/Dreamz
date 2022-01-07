@@ -40,8 +40,9 @@ fun EditDreamScreen(
             }
             if (dreamDay?.dreams?.isEmpty() == true) {
                 IconButton(onClick = {
-                    editDreamViewModel.deleteDreamDay(dreamId)
-                    navController.popBackStack(Screen.DreamList.route, inclusive = false)
+                    editDreamViewModel.deleteDreamDay(dreamDay.uuid, dreamId, afterDelete = {
+                        navController.popBackStack(Screen.DreamList.route, inclusive = false)
+                    })
                 }) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                 }

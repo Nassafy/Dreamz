@@ -7,7 +7,12 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.*
 
-data class DreamDayState(val date: String, val dreams: List<DreamState>, val id: Long)
+data class DreamDayState(
+    val date: String,
+    val dreams: List<DreamState>,
+    val id: Long,
+    val uuid: String
+)
 
 data class DreamState(
     val name: String,
@@ -38,5 +43,7 @@ internal fun DreamDayWithDream.toState(): DreamDayState {
     return DreamDayState(
         id = this.dreamDay.uid,
         date = date.format(dateFormatter),
-        dreams = this.dreams.map { it.toState() })
+        dreams = this.dreams.map { it.toState() },
+        uuid = this.dreamDay.id
+    )
 }

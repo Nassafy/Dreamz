@@ -151,13 +151,6 @@ fun EditDream(
                 IconButton(onClick = { showNote.value = !showNote.value }) {
                     Icon(Icons.Default.Edit, contentDescription = "Edit note")
                 }
-
-                if (title.value.isEmpty() && content.value.isEmpty() && textNote.value?.isEmpty() == true) {
-
-                    IconButton(onClick = { delete(dream.id) }) {
-                        Icon(Icons.Default.Delete, contentDescription = "delete")
-                    }
-                }
             }
             if (showNote.value) {
                 Surface(
@@ -184,6 +177,14 @@ fun EditDream(
                                 }
                             },
                     )
+                }
+            }
+
+            Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
+                if (title.value.isEmpty() && content.value.isEmpty() && textNote.value.isNullOrEmpty()) {
+                    IconButton(onClick = { delete(dream.id) }) {
+                        Icon(Icons.Default.Delete, contentDescription = "delete")
+                    }
                 }
             }
         }

@@ -17,11 +17,11 @@ import java.time.OffsetDateTime
 import javax.inject.Inject
 
 class DreamRepository @Inject constructor(
-        private val dreamApi: DreamApi,
-        private val dreamDayDao: DreamDayDao,
-        private val dreamDao: DreamDao,
-        private val tagDao: TagDao,
-        private val filterManager: FilterDataStoreManager
+    private val dreamApi: DreamApi,
+    private val dreamDayDao: DreamDayDao,
+    private val dreamDao: DreamDao,
+    private val tagDao: TagDao,
+    private val filterManager: FilterDataStoreManager
 ) {
     private suspend fun getDistantDreamDays(): Flow<List<DreamDayDto>> {
         return flow {
@@ -34,9 +34,9 @@ class DreamRepository @Inject constructor(
 
     fun getTodayDreamDay(): Flow<DreamDay?> {
         val start =
-                LocalDate.now().atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
+            LocalDate.now().atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
         val end = LocalDate.now().atStartOfDay().plusDays(1).toInstant(OffsetDateTime.now().offset)
-                .toEpochMilli()
+            .toEpochMilli()
 
         return dreamDayDao.getDreamDayByDate(start, end)
     }
@@ -44,7 +44,7 @@ class DreamRepository @Inject constructor(
     fun getDreamDayByDate(start: LocalDate, end: LocalDate): Flow<List<DreamDay>> {
         val startEpoch = start.atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
         val endEpoch =
-                end.plusDays(1).atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
+            end.plusDays(1).atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
         return dreamDayDao.getDreamDaysByDate(startEpoch, endEpoch)
     }
 
@@ -57,15 +57,15 @@ class DreamRepository @Inject constructor(
     suspend fun updateDreamDay(dreamDay: DreamDay) = dreamDayDao.updateDreamDay(dreamDay)
 
     fun getAllDreamDaysWithDreams(): Flow<List<DreamDayWithDream>> =
-            dreamDayDao.getDreamDaysWithDreams()
+        dreamDayDao.getDreamDaysWithDreams()
 
     fun getDreamDaysWithDreams(): Flow<List<DreamDayWithDream>> {
         return dreamDayDao.getDreamDaysWithDreams().combine(filterManager.text) { dreams, text ->
             dreams.filter { dreamDayWithDream ->
                 text == null || text.isBlank() || dreamDayWithDream.dreams.any {
                     it.text.contains(text, ignoreCase = true) || it.name.contains(
-                            text,
-                            ignoreCase = true
+                        text,
+                        ignoreCase = true
                     )
                 }
             }
@@ -94,11 +94,11 @@ class DreamRepository @Inject constructor(
             dreamDayDao.getDreamDay(d.dreamDayId).take(1).collect {
                 if (it != null) {
                     dreamDayDao.updateDreamDay(
-                            it.copy(
-                                    technicalMetadata = it.technicalMetadata.copy(
-                                            lastChange = Instant.now()
-                                    )
+                        it.copy(
+                            technicalMetadata = it.technicalMetadata.copy(
+                                lastChange = Instant.now()
                             )
+                        )
                     )
                 }
             }
@@ -116,10 +116,11 @@ class DreamRepository @Inject constructor(
         getDistantDreamDays().combine(getAllDreamDaysWithDreams()) { distants, locals ->
             distants.forEach { distant ->
                 val local = locals.find { it.dreamDay.id == distant.id }
+
                 if (local == null || Duration.between(
-                                local.dreamDay.technicalMetadata.lastChange,
-                                distant.techMetadata.lastChange,
-                        ).seconds > 5
+                        local.dreamDay.technicalMetadata.lastChange,
+                        distant.techMetadata.lastChange,
+                    ).seconds > 5
                 ) {
                     local?.dreamDay?.let { dreamDayDao.deleteDreamDay(it.uid) }
                     val dreamDayId = dreamDayDao.saveDreamDay(distant.toModel())
@@ -131,10 +132,14 @@ class DreamRepository @Inject constructor(
             }
             locals.forEach { local ->
                 val distant = distants.find { it.id == local.dreamDay.id }
-                if (distant == null || Duration.between(
-                                distant.techMetadata.lastChange,
-                                local.dreamDay.technicalMetadata.lastChange
-                        ).seconds > 5
+                val isEmpty = local.dreams.isEmpty()
+                        || (local.dreams.first().name.isEmpty()
+                        || local.dreams.first().text.isEmpty())
+                if (!isEmpty && (distant == null || Duration.between(
+                        distant.techMetadata.lastChange,
+                        local.dreamDay.technicalMetadata.lastChange
+                    ).seconds > 5
+                            )
                 ) {
                     dreamApi.saveDream(local.toDto())
                 }

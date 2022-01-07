@@ -14,6 +14,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
     var username by mutableStateOf("")
     var password by mutableStateOf("")
+    var passwordVisibility by  mutableStateOf(false)
     var loginError by mutableStateOf(false)
         private set
     var loginSuccessfull by mutableStateOf(false)
@@ -26,5 +27,9 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
                 loginSuccessfull = true
             }
         }
+    }
+
+    fun togglePasswordVisibility() {
+        passwordVisibility = !passwordVisibility
     }
 }
