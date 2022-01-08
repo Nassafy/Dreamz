@@ -8,8 +8,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.TagType
 import com.matthias.dreamz.ui.screen.Screen
 
@@ -18,8 +20,8 @@ fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: Na
     val tags = tagsViewModel.getTagsInfo(tagType).collectAsState(initial = listOf()).value
     val scrollState = rememberScrollState()
     val tagName = when (tagType) {
-        TagType.TAG -> "Tags"
-        TagType.PEOPLE -> "Peoples"
+        TagType.TAG -> stringResource(id = R.string.tag)
+        TagType.PEOPLE -> stringResource(id = R.string.people)
     }
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = tagName) })
@@ -40,7 +42,7 @@ fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: Na
                         modifier = Modifier.padding(horizontal = 15.dp)
                     )
                     Text(
-                        "Count",
+                        stringResource(id = R.string.count),
                         style = MaterialTheme.typography.h6,
                         modifier = Modifier.padding(horizontal = 15.dp)
                     )

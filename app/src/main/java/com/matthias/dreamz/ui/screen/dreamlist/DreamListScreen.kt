@@ -15,10 +15,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.TagType
 import com.matthias.dreamz.ui.screen.Screen
 import com.matthias.dreamz.ui.screen.dreamlist.widget.DreamCard
@@ -55,7 +57,7 @@ fun DreamsListScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Dreamz") }, actions = {
+            TopAppBar(title = { Text(stringResource(id = R.string.app_name)) }, actions = {
                 DreamSearch(
                     filterText = filterText,
                     setFilterText = { dreamListViewModel.setFilterText(it) },
@@ -72,11 +74,11 @@ fun DreamsListScreen(
                 )
                 if (dreamDays != null && dreamDays.isEmpty()) {
                     IconButton(onClick = { dreamListViewModel.sync() }) {
-                        Icon(Icons.Default.Sync, contentDescription = "Sync")
+                        Icon(Icons.Default.Sync, contentDescription = stringResource(id = R.string.sync))
                     }
                 }
                 if (!syncState) {
-                    Icon(Icons.Default.SyncDisabled, contentDescription = "Sync failed")
+                    Icon(Icons.Default.SyncDisabled, contentDescription = stringResource(id = R.string.sync_failed))
                 }
                 Chip {
                     Text("${dreamDays?.size ?: 0}")
@@ -89,7 +91,7 @@ fun DreamsListScreen(
                 }) {
                     Icon(
                         imageVector = Icons.Default.Menu,
-                        contentDescription = "Drawer"
+                        contentDescription = stringResource(id = R.string.drawer)
                     )
                 }
             })
@@ -110,7 +112,7 @@ fun DreamsListScreen(
                             }
                         )
                     }) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
+                    Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.add))
                 }
             } else {
                 FloatingActionButton(
@@ -121,7 +123,7 @@ fun DreamsListScreen(
                             )
                         )
                     }) {
-                    Icon(Icons.Default.Edit, contentDescription = "Edit")
+                    Icon(Icons.Default.Edit, contentDescription = stringResource(id = R.string.edit))
                 }
             }
 

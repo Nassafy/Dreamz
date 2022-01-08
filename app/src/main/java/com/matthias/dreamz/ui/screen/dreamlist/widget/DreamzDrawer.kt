@@ -12,8 +12,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.matthias.dreamz.R
 import com.matthias.dreamz.ui.screen.Screen
 import kotlinx.coroutines.launch
 
@@ -27,28 +29,28 @@ fun DreamzDrawer(navController: NavController, drawerState: DrawerState) {
     ) {
         DrawerElem(
             route = Screen.Calendar.route,
-            name = "Calendar",
+            name = stringResource(id = R.string.calendar),
             icon = Icons.Default.CalendarToday,
             navController = navController,
             drawerState = drawerState
         )
         DrawerElem(
             route = Screen.Peoples.route,
-            name = "Peoples",
+            name = stringResource(id = R.string.peoples),
             icon = Icons.Default.People,
             navController = navController,
             drawerState = drawerState
         )
         DrawerElem(
             route = Screen.Tags.route,
-            name = "Tags",
+            name = stringResource(id = R.string.tags),
             icon = Icons.Default.Tag,
             navController = navController,
             drawerState = drawerState
         )
         DrawerElem(
             route = Screen.Graph.route,
-            name = "Graphs",
+            name = stringResource(id = R.string.graphs),
             icon = Icons.Default.Leaderboard,
             navController = navController,
             drawerState = drawerState

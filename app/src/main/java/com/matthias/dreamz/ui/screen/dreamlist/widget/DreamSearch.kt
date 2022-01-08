@@ -13,7 +13,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.matthias.dreamz.R
 import com.matthias.dreamz.ui.screen.viewdream.widget.Chip
 import com.matthias.dreamz.ui.widget.AutocompleteTextField
 
@@ -104,14 +106,14 @@ fun DreamSearch(
                     peopleSearch = ""
                     openTextSearchDialog = false
                 }) {
-                    Text("Search")
+                    Text(stringResource(id = R.string.search))
                 }
             }
         }, text = {
             Column {
                 OutlinedTextField(value = textSearch, onValueChange = { textSearch = it }, label = {
                     Text(
-                        text = "Search"
+                        text = stringResource(id = R.string.search)
                     )
                 })
                 Spacer(modifier = Modifier.size(10.dp))
@@ -121,7 +123,7 @@ fun DreamSearch(
                     onSelectSuggestion = { tagSearch = it },
                     suggestions = tags,
                     label = {
-                        Text(text = "Tag")
+                        Text(text = stringResource(id = R.string.tag))
                     }
                 )
                 Spacer(modifier = Modifier.size(10.dp))
@@ -131,7 +133,7 @@ fun DreamSearch(
                     onSelectSuggestion = { peopleSearch = it },
                     suggestions = peoples,
                     label = {
-                        Text(text = "People")
+                        Text(text = stringResource(id = R.string.people))
                     }
                 )
             }

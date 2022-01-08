@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowRow
+import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.DreamMetadata
 import com.matthias.dreamz.ui.screen.viewdream.DreamState
 import com.matthias.dreamz.ui.widget.AutocompleteTextField
@@ -64,7 +66,13 @@ fun DreamView(
             Spacer(modifier = Modifier.height(10.dp))
             if (dream.textNote?.isNotEmpty() == true) {
                 Surface(elevation = 6.dp, modifier = Modifier.clip(RoundedCornerShape(10.dp))) {
-                    Text(text = dream.textNote, style = TextStyle(textAlign = TextAlign.Justify, fontSize = 15.sp), modifier = Modifier.fillMaxWidth().padding(10.dp))
+                    Text(
+                        text = dream.textNote,
+                        style = TextStyle(textAlign = TextAlign.Justify, fontSize = 15.sp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(10.dp)
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
@@ -74,7 +82,7 @@ fun DreamView(
             TagRow(
                 icon = Icons.Default.LocalOffer,
                 tags = dream.metadata.tags,
-                contentDescription = "Tags",
+                contentDescription = stringResource(id = R.string.tags),
                 onAddTag = {
                     saveMetadata(dream.metadata.copy(tags = dream.metadata.tags + it))
                 },
@@ -86,7 +94,7 @@ fun DreamView(
             TagRow(
                 icon = Icons.Default.People,
                 tags = dream.metadata.peoples,
-                contentDescription = "Peoples",
+                contentDescription = stringResource(id = R.string.peoples),
                 onAddTag = {
                     saveMetadata(dream.metadata.copy(peoples = dream.metadata.peoples + it))
                 },
@@ -142,7 +150,7 @@ fun TagRow(
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Icon(
                                         Icons.Default.Close,
-                                        contentDescription = "Delete",
+                                        contentDescription = stringResource(id = R.string.delete),
                                         modifier = Modifier.clickable {
                                             onDeleteTag(it)
                                         })
@@ -156,7 +164,7 @@ fun TagRow(
                         onAddTag(tag.value)
                         showTagAlertDialog.value = false
                     }) {
-                        Text("Ajouter")
+                        Text(stringResource(id = R.string.add))
                     }
                 }
             }
@@ -191,7 +199,7 @@ fun Note(note: Int, saveNote: (value: Int) -> Unit) {
     }
     Row {
         Chip(modifier = Modifier.clickable { showAlertNote.value = true }) {
-            Icon(Icons.Default.Assignment, contentDescription = "Note")
+            Icon(Icons.Default.Assignment, contentDescription = stringResource(id = R.string.note))
         }
         Chip {
             Text("$note")
@@ -220,7 +228,7 @@ fun NoteAlertDialog(note: Int, onDismissRequest: () -> Unit, saveNote: (value: I
                     saveNote(sliderValue.value)
                     onDismissRequest()
                 }) {
-                    Text("Ok")
+                    Text(stringResource(id = R.string.ok))
                 }
             }
         }

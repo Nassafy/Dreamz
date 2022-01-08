@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Dreamz</string>
+    <string name="calendar">Calendrier</string>
+    <string name="tags">Tags</string>
+    <string name="tag">Tag</string>
+    <string name="peoples">Personnes</string>
+    <string name="people">Personne</string>
+    <string name="graphs">Graphiques</string>
+    <string name="count">Occurence</string>
+    <string name="monthly_dream_message">Nombre de rêves du mois: %1s</string>
+    <string-array name="week_days">
+        <item>L</item>
+        <item>M</item>
+        <item>M</item>
+        <item>J</item>
+        <item>V</item>
+        <item>S</item>
+        <item>D</item>
+    </string-array>
+    <string name="search">Recherche</string>
+    <string name="add">Ajouter</string>
+    <string name="ok">Ok</string>
+    <string name="delete">Supprimer</string>
+    <string name="note">Note</string>
+    <string name="note_message">Note: %1s</string>
+    <string name="sync">Synchronisation</string>
+    <string name="sync_failed">Echec de la synchronisation</string>
+    <string name="drawer">Tiroir d\'application</string>
+    <string name="edit">Editer</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="login">Se connecter</string>
+    <string name="login_error">Erreur de connection</string>
+</resources>

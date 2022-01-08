@@ -9,23 +9,26 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.DreamDay
 import com.matthias.dreamz.ui.screen.Screen
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @ExperimentalPagerApi
-@Composable()
+@Composable
 fun CalendarScreen(calendarViewModel: CalendarViewModel, navController: NavController) {
     val pagerState = rememberPagerState(initialPage = Int.MAX_VALUE - 1)
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Calendar") }) }) {
+    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(id = R.string.calendar)) }) }) {
         HorizontalPager(state = pagerState, count = Int.MAX_VALUE) { page ->
             Calendar(
                 calendarViewModel = calendarViewModel,
@@ -40,7 +43,7 @@ fun CalendarScreen(calendarViewModel: CalendarViewModel, navController: NavContr
     }
 }
 
-@Composable()
+@Composable
 fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int, onClick: (DreamDay?) -> Unit) {
     val pageDate = LocalDate.now().minusMonths(monthOffset.toLong())
 
@@ -56,7 +59,7 @@ fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int, onClick: (D
             LocalDate.now().dayOfMonth
         else
             nbDays
-    val daysLabel = listOf("L", "M", "M", "J", "V", "S", "D")
+    val daysLabel = stringArrayResource(id = R.array.week_days)
     val nbDream = dreams.values.size
     Column {
         Row(
@@ -110,7 +113,7 @@ fun Calendar(calendarViewModel: CalendarViewModel, monthOffset: Int, onClick: (D
             }
         }
 
-        Text("Dream this month: $nbDream")
+        Text(stringResource(id = R.string.monthly_dream_message, nbDream))
     }
 }
 
