@@ -9,19 +9,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.matthias.dreamz.ui.screen.graph.widget.DreamGraph
+import com.matthias.dreamz.ui.widget.BackNavButton
 import java.time.LocalDate
 
 @ExperimentalPagerApi
 @Composable
-fun GraphScreen(graphViewModel: GraphViewModel) {
+fun GraphScreen(graphViewModel: GraphViewModel, navController: NavController) {
     val currentYear = LocalDate.now().year
     val pagerState = rememberPagerState(initialPage = currentYear)
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "Graph") })
+        TopAppBar(title = { Text(text = "Graph") }, navigationIcon = {
+            BackNavButton(navController)
+        })
     }) {
         Surface(color = MaterialTheme.colors.surface, modifier = Modifier.fillMaxSize()) {
             HorizontalPager(count = currentYear + 1, state = pagerState) {

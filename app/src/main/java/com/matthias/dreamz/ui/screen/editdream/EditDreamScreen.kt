@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.matthias.dreamz.ui.screen.Screen
 import com.matthias.dreamz.ui.screen.editdream.widget.EditDream
+import com.matthias.dreamz.ui.widget.BackNavButton
 
 @ExperimentalComposeUiApi
 @Composable
@@ -47,6 +48,8 @@ fun EditDreamScreen(
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                 }
             }
+        }, navigationIcon = {
+            BackNavButton(navController)
         })
     }) {
         if (dreamDay != null) {

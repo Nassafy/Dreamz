@@ -19,6 +19,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.matthias.dreamz.data.model.TagType
 import com.matthias.dreamz.ui.screen.Screen
 import com.matthias.dreamz.ui.screen.viewdream.widget.DreamView
+import com.matthias.dreamz.ui.widget.BackNavButton
 
 @ExperimentalComposeUiApi
 @ExperimentalPagerApi
@@ -58,6 +59,8 @@ fun ViewDreamScreen(
             }) {
                 Icon(Icons.Default.Edit, contentDescription = "Edit")
             }
+        }, navigationIcon = {
+            BackNavButton(navController)
         })
     }) {
         Column(modifier = Modifier.fillMaxHeight()) {

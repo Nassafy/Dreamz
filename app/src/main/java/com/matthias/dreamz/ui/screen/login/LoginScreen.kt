@@ -16,7 +16,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.work.WorkManager
 import com.matthias.dreamz.R
+import com.matthias.dreamz.ui.screen.Screen
+import com.matthias.dreamz.worker.SyncWorker
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
@@ -64,7 +67,9 @@ fun LoginScreen(loginViewModel: LoginViewModel, navController: NavController) {
     }
     if (loginViewModel.loginSuccessfull) {
         LaunchedEffect(Unit) {
+            loginViewModel.sync()
             navController.popBackStack()
+            navController.navigate(Screen.DreamList.route)
         }
     }
 }

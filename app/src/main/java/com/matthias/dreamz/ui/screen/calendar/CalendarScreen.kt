@@ -20,6 +20,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.DreamDay
 import com.matthias.dreamz.ui.screen.Screen
+import com.matthias.dreamz.ui.widget.BackNavButton
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -28,7 +29,11 @@ import java.time.format.DateTimeFormatter
 fun CalendarScreen(calendarViewModel: CalendarViewModel, navController: NavController) {
     val pagerState = rememberPagerState(initialPage = Int.MAX_VALUE - 1)
 
-    Scaffold(topBar = { TopAppBar(title = { Text(stringResource(id = R.string.calendar)) }) }) {
+    Scaffold(topBar = {
+        TopAppBar(title = { Text(stringResource(id = R.string.calendar)) }, navigationIcon = {
+            BackNavButton(navController)
+        })
+    }) {
         HorizontalPager(state = pagerState, count = Int.MAX_VALUE) { page ->
             Calendar(
                 calendarViewModel = calendarViewModel,

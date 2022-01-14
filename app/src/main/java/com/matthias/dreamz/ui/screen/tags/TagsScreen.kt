@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.TagType
 import com.matthias.dreamz.ui.screen.Screen
+import com.matthias.dreamz.ui.widget.BackNavButton
 
 @Composable
 fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: NavController) {
@@ -24,7 +25,9 @@ fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: Na
         TagType.PEOPLE -> stringResource(id = R.string.people)
     }
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = tagName) })
+        TopAppBar(title = { Text(text = tagName) }, navigationIcon = {
+            BackNavButton(navController)
+        })
     }) {
         Surface(elevation = 5.dp, modifier = Modifier.fillMaxSize()) {
             Column(

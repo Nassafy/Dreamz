@@ -126,7 +126,7 @@ class MainActivity : ComponentActivity() {
                             }
                             dreamzComposable(Screen.Graph.route) {
                                 val graphViewModel: GraphViewModel = hiltViewModel()
-                                GraphScreen(graphViewModel = graphViewModel)
+                                GraphScreen(graphViewModel = graphViewModel, navController = navController)
                             }
                             dreamzComposable(Screen.Login.route) {
                                 val loginViewModel: LoginViewModel = hiltViewModel()
@@ -142,6 +142,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             if (!logged) {
+                navController.popBackStack()
                 navController.navigate(Screen.Login.route)
             }
         }
