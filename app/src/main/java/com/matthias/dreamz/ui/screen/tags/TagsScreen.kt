@@ -2,6 +2,9 @@ package com.matthias.dreamz.ui.screen.tags
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -19,11 +22,11 @@ import com.matthias.dreamz.ui.widget.BackNavButton
 @Composable
 fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: NavController) {
     val tags = tagsViewModel.getTagsInfo(tagType).collectAsState(initial = listOf()).value
-    val scrollState = rememberScrollState()
     val tagName = when (tagType) {
         TagType.TAG -> stringResource(id = R.string.tag)
         TagType.PEOPLE -> stringResource(id = R.string.people)
     }
+    val state = rememberLazyListState()
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = tagName) }, navigationIcon = {
             BackNavButton(navController)
@@ -33,7 +36,6 @@ fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: Na
             Column(
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
-                    .verticalScroll(scrollState)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -53,24 +55,26 @@ fun TagsScreen(tagsViewModel: TagsViewModel, tagType: TagType, navController: Na
                 Spacer(modifier = Modifier.size(10.dp))
                 Divider()
                 Spacer(modifier = Modifier.size(10.dp))
-                tags.forEach {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                            .clickable {
-                                tagsViewModel.setFilter(tagType = tagType, tag = it.name)
-                                navController.navigate(Screen.DreamList.route)
+                LazyColumn(state = state) {
+                    items(tags) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                                .clickable {
+                                    tagsViewModel.setFilter(tagType = tagType, tag = it.name)
+                                    navController.navigate(Screen.DreamList.route)
 
-                            }
-                    ) {
-                        Text(it.name, modifier = Modifier.padding(horizontal = 15.dp))
-                        Text("${it.count}", modifier = Modifier.padding(horizontal = 15.dp))
+                                }
+                        ) {
+                            Text(it.name, modifier = Modifier.padding(horizontal = 15.dp))
+                            Text("${it.count}", modifier = Modifier.padding(horizontal = 15.dp))
+                        }
+                        Spacer(modifier = Modifier.size(10.dp))
+                        Divider()
+                        Spacer(modifier = Modifier.size(10.dp))
                     }
-                    Spacer(modifier = Modifier.size(10.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.size(10.dp))
                 }
             }
         }
