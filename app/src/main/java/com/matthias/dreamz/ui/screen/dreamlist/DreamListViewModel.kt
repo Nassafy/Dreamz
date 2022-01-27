@@ -15,6 +15,7 @@ import com.matthias.dreamz.repository.DreamRepository
 import com.matthias.dreamz.worker.SyncWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -38,6 +39,7 @@ class DreamListViewModel @Inject constructor(
     val refreshing = isRefreshing()
 
     val syncState = flagDataStoreManager.syncState
+
 
     fun addDream(onAdd: (dreamDayId: Long) -> Unit) {
         viewModelScope.launch {
