@@ -38,4 +38,7 @@ interface DreamDayDao {
 
     @Query("delete from DreamDay where uid=:dreamDayId")
     suspend fun deleteDreamDay(dreamDayId: Long)
+
+    @Query("select count() from DreamDay where date >= :dateA and date < :dateB ")
+    fun getDreamCountDayByDate(dateA: Long, dateB: Long): Int
 }

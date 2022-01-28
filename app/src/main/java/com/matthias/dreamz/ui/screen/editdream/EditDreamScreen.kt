@@ -13,13 +13,18 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.matthias.dreamz.ui.screen.Screen
 import com.matthias.dreamz.ui.screen.editdream.widget.EditDream
 import com.matthias.dreamz.ui.widget.BackNavButton
+import com.matthias.dreamz.widget.DreamzWidgetReceiver.Companion.updateWidgets
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @ExperimentalComposeUiApi
 @Composable
@@ -30,6 +35,8 @@ fun EditDreamScreen(
 ) {
     val scrollableState = rememberScrollState(0)
     val dreamDay = editDreamViewModel.getDream(dreamId).collectAsState(initial = null).value
+    val coroutine = rememberCoroutineScope();
+    val context = LocalContext.current
 
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = dreamDay?.date ?: "") }, actions = {
@@ -42,6 +49,7 @@ fun EditDreamScreen(
             if (dreamDay?.dreams?.isEmpty() == true) {
                 IconButton(onClick = {
                     editDreamViewModel.deleteDreamDay(dreamDay.uuid, dreamId, afterDelete = {
+                        coroutine.launch(Dispatchers.IO) { context.updateWidgets() }
                         navController.popBackStack(Screen.DreamList.route, inclusive = false)
                     })
                 }) {
@@ -63,8 +71,13 @@ fun EditDreamScreen(
                 (dreamDay.dreams).forEach { dreamState ->
                     EditDream(
                         dream = dreamState,
-                        save = { editDreamViewModel.saveDream(it) },
-                        delete = { editDreamViewModel.deleteDream(it) })
+                        save = {
+                            editDreamViewModel.saveDream(it)
+                            coroutine.launch(Dispatchers.IO) { context.updateWidgets() }
+                        },
+                        delete = {
+                            editDreamViewModel.deleteDream(it)
+                        })
                 }
                 Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
                     IconButton(onClick = { editDreamViewModel.addDream(dreamDay.id) }) {

@@ -24,11 +24,12 @@
     <string name="note">Note</string>
     <string name="note_message">Note: %1s</string>
     <string name="sync">Synchronisation</string>
-    <string name="sync_failed">Echec de la synchronisation</string>
+    <string name="sync_failed">Echec de la synchronisDreamzWiation</string>
     <string name="drawer">Tiroir d\'application</string>
     <string name="edit">Editer</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="password">Mot de passe</string>
     <string name="login">Se connecter</string>
     <string name="login_error">Erreur de connection</string>
+    <string name="dreamz_widget_description">Dreamz widget</string>
 </resources>

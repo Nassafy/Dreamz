@@ -10,10 +10,7 @@ import com.matthias.dreamz.datastore.FilterDataStoreManager
 import com.matthias.dreamz.toDto
 import com.matthias.dreamz.toModel
 import kotlinx.coroutines.flow.*
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDate
-import java.time.OffsetDateTime
+import java.time.*
 import javax.inject.Inject
 
 class DreamRepository @Inject constructor(
@@ -172,6 +169,22 @@ class DreamRepository @Inject constructor(
         } else {
             tagDao.updateTag(tag.copy(quantity = tag.quantity + 1))
         }
+    }
+
+    fun getNbDreamWeek(): Int {
+        val today = LocalDateTime.now()
+        val weekBack = today.minusWeeks(1)
+        val todayMilli = today.toInstant(OffsetDateTime.now().offset).toEpochMilli()
+        val weekBackMilli = weekBack.toInstant(OffsetDateTime.now().offset).toEpochMilli()
+        return dreamDayDao.getDreamCountDayByDate(weekBackMilli, todayMilli)
+    }
+
+    suspend fun getDreamOfWeek(): List<DreamDay> {
+        val today = LocalDateTime.now()
+        val weekBack = today.minusWeeks(1)
+        val todayMilli = today.toInstant(OffsetDateTime.now().offset).toEpochMilli()
+        val weekBackMilli = weekBack.toInstant(OffsetDateTime.now().offset).toEpochMilli()
+        return dreamDayDao.getDreamDaysByDate(weekBackMilli, todayMilli).first()
     }
 
 }
