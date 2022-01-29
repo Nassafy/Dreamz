@@ -146,4 +146,7 @@ dependencies {
     implementation("androidx.startup:startup-runtime:1.1.0")
 
     implementation("androidx.compose.runtime:runtime-livedata:${rootProject.extra["compose_version"]}")
+
+    // glance
+    implementation("androidx.glance:glance-appwidget:1.0.0-alpha02")
 }
