@@ -5,15 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.matthias.dreamz.api.DreamApi
 import com.matthias.dreamz.data.model.Dream
+import com.matthias.dreamz.data.model.DreamDay
 import com.matthias.dreamz.repository.DreamRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class EditDreamViewModel @Inject constructor(private val dreamRepository: DreamRepository, private val dreamApi: DreamApi) :
+class EditDreamViewModel @Inject constructor(
+    private val dreamRepository: DreamRepository,
+    private val dreamApi: DreamApi
+) :
     ViewModel() {
     fun getDream(dreamId: Long) = dreamRepository.getDreamDay(dreamId).map { it?.toState() }
 
@@ -58,6 +62,14 @@ class EditDreamViewModel @Inject constructor(private val dreamRepository: DreamR
             } catch (error: Exception) {
                 Log.d("Dreamz", "deleteDreamDay: ${error.message}")
             }
+        }
+    }
+
+    fun addDreamDay(onAdd: (id: Long) -> Unit) {
+        viewModelScope.launch {
+            val newId = dreamRepository.saveDreamDay(DreamDay(date = LocalDate.now()))
+            dreamRepository.addDream(Dream(dreamDayId = newId))
+            onAdd(newId)
         }
     }
 }

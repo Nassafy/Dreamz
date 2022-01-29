@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -38,20 +39,37 @@ fun EditDreamScreen(
     val coroutine = rememberCoroutineScope();
     val context = LocalContext.current
 
+    LaunchedEffect(dreamId) {
+        if (dreamId <= 0) {
+            editDreamViewModel.addDreamDay {
+                navController.popBackStack()
+                navController.navigate(Screen.EditDream.createRoute(it))
+            }
+        }
+    }
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = dreamDay?.date ?: "") }, actions = {
             IconButton(onClick = {
                 navController.popBackStack()
-                navController.navigate(Screen.ViewDream.createRoute(dreamId))
+                if (dreamDay != null) {
+                    navController.navigate(Screen.ViewDream.createRoute(dreamDay.id))
+                }
             }) {
                 Icon(Icons.Default.RemoveRedEye, contentDescription = "View")
             }
             if (dreamDay?.dreams?.isEmpty() == true) {
                 IconButton(onClick = {
-                    editDreamViewModel.deleteDreamDay(dreamDay.uuid, dreamId, afterDelete = {
-                        coroutine.launch(Dispatchers.IO) { context.updateWidgets() }
-                        navController.popBackStack(Screen.DreamList.route, inclusive = false)
-                    })
+                    editDreamViewModel.deleteDreamDay(
+                        dreamDay.uuid,
+                        dreamDayId = dreamDay.id,
+                        afterDelete = {
+                            coroutine.launch(Dispatchers.IO) { context.updateWidgets() }
+                            navController.popBackStack(
+                                Screen.DreamList.route,
+                                inclusive = false
+                            )
+                        })
+
                 }) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
                 }

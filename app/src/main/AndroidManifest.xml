@@ -38,6 +38,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <data android:scheme="dreamz" android:host="edit" />
+            </intent-filter>
+
         </activity>
 
         <provider

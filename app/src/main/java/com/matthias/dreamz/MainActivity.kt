@@ -90,7 +90,8 @@ class MainActivity : ComponentActivity() {
                                 Screen.EditDream.route,
                                 arguments = listOf(navArgument("dreamId") {
                                     type = NavType.LongType
-                                })
+                                }),
+                                deepLink = listOf(navDeepLink { uriPattern="dreamz://edit/{dreamId}" })
                             ) {
                                 val editDreamViewModel: EditDreamViewModel = hiltViewModel()
                                 val dreamDayId = it.arguments?.getLong("dreamId")
@@ -126,7 +127,10 @@ class MainActivity : ComponentActivity() {
                             }
                             dreamzComposable(Screen.Graph.route) {
                                 val graphViewModel: GraphViewModel = hiltViewModel()
-                                GraphScreen(graphViewModel = graphViewModel, navController = navController)
+                                GraphScreen(
+                                    graphViewModel = graphViewModel,
+                                    navController = navController
+                                )
                             }
                             dreamzComposable(Screen.Login.route) {
                                 val loginViewModel: LoginViewModel = hiltViewModel()
@@ -151,11 +155,14 @@ class MainActivity : ComponentActivity() {
     fun NavGraphBuilder.dreamzComposable(
         route: String,
         arguments: List<NamedNavArgument> = emptyList(),
+        deepLink: List<NavDeepLink> = emptyList(),
         content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
     ) {
         val duration = 250
         composable(
-            route, arguments = arguments, enterTransition = { initial, _ ->
+            route, arguments = arguments,
+            deepLinks = deepLink,
+            enterTransition = { initial, _ ->
                 fadeIn(
                     animationSpec = tween(duration)
                 )

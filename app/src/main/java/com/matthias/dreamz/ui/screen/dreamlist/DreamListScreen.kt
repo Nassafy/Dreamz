@@ -74,11 +74,17 @@ fun DreamsListScreen(
                 )
                 if (dreamDays != null && dreamDays.isEmpty()) {
                     IconButton(onClick = { dreamListViewModel.sync() }) {
-                        Icon(Icons.Default.Sync, contentDescription = stringResource(id = R.string.sync))
+                        Icon(
+                            Icons.Default.Sync,
+                            contentDescription = stringResource(id = R.string.sync)
+                        )
                     }
                 }
                 if (!syncState) {
-                    Icon(Icons.Default.SyncDisabled, contentDescription = stringResource(id = R.string.sync_failed))
+                    Icon(
+                        Icons.Default.SyncDisabled,
+                        contentDescription = stringResource(id = R.string.sync_failed)
+                    )
                 }
                 Chip {
                     Text("${dreamDays?.size ?: 0}")
@@ -100,16 +106,8 @@ fun DreamsListScreen(
             if (todayDream == null) {
                 FloatingActionButton(
                     onClick = {
-                        dreamListViewModel.addDream(
-                            onAdd = {
-                                coroutineScope.launch {
-                                    navController.navigate(
-                                        Screen.EditDream.createRoute(
-                                            it
-                                        )
-                                    )
-                                }
-                            }
+                        navController.navigate(
+                            Screen.EditDream.createRoute(0)
                         )
                     }) {
                     Icon(Icons.Default.Add, contentDescription = stringResource(id = R.string.add))
@@ -123,7 +121,10 @@ fun DreamsListScreen(
                             )
                         )
                     }) {
-                    Icon(Icons.Default.Edit, contentDescription = stringResource(id = R.string.edit))
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = stringResource(id = R.string.edit)
+                    )
                 }
             }
 
