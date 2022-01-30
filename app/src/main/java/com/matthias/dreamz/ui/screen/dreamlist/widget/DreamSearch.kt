@@ -2,6 +2,7 @@ package com.matthias.dreamz.ui.screen.dreamlist.widget
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.matthias.dreamz.R
 import com.matthias.dreamz.ui.screen.viewdream.widget.Chip
@@ -28,6 +30,10 @@ fun DreamSearch(
     tags: List<String>,
     filterPeople: String?,
     setFilterPeople: (String) -> Unit,
+    minNote: Int?,
+    setMinNote: (Int?) -> Unit,
+    maxNote: Int?,
+    setMaxNote: (Int?) -> Unit,
     peoples: List<String>
 ) {
     var openTextSearchDialog by rememberSaveable {
@@ -44,6 +50,18 @@ fun DreamSearch(
 
     var peopleSearch by rememberSaveable {
         mutableStateOf(filterPeople ?: "")
+    }
+
+    var minNoteSearch by rememberSaveable {
+        mutableStateOf(
+            minNote?.toString() ?: ""
+        )
+    }
+
+    var maxNoteSearch by rememberSaveable {
+        mutableStateOf(
+            maxNote?.toString() ?: ""
+        )
     }
 
     if (filterText?.isNotBlank() == true) {
@@ -86,6 +104,33 @@ fun DreamSearch(
             }
         }
     }
+    if (minNote != null) {
+        Chip {
+            Row {
+                Text(text = "> $minNote")
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = "Delete",
+                    modifier = Modifier.clickable {
+                        setMinNote(null)
+                    })
+            }
+        }
+    }
+
+    if (maxNote != null) {
+        Chip {
+            Row {
+                Text(text = "< $maxNote")
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = "Delete",
+                    modifier = Modifier.clickable {
+                        setMaxNote(null)
+                    })
+            }
+        }
+    }
     IconButton(onClick = { openTextSearchDialog = true }) {
         Icon(Icons.Default.Search, contentDescription = "Search")
     }
@@ -96,14 +141,19 @@ fun DreamSearch(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 TextButton(onClick = {
                     setFilterText(textSearch)
                     setFilterTag(tagSearch)
                     setFilterPeople(peopleSearch)
+                    setMinNote(minNoteSearch.toIntOrNull())
+                    setMaxNote(maxNoteSearch.toIntOrNull())
                     textSearch = ""
                     tagSearch = ""
                     peopleSearch = ""
+                    minNoteSearch = ""
+                    maxNoteSearch = ""
                     openTextSearchDialog = false
                 }) {
                     Text(stringResource(id = R.string.search))
@@ -116,7 +166,6 @@ fun DreamSearch(
                         text = stringResource(id = R.string.search)
                     )
                 })
-                Spacer(modifier = Modifier.size(10.dp))
                 AutocompleteTextField(
                     text = tagSearch,
                     onChangeText = { tagSearch = it },
@@ -126,7 +175,6 @@ fun DreamSearch(
                         Text(text = stringResource(id = R.string.tag))
                     }
                 )
-                Spacer(modifier = Modifier.size(10.dp))
                 AutocompleteTextField(
                     text = peopleSearch,
                     onChangeText = { peopleSearch = it },
@@ -136,6 +184,31 @@ fun DreamSearch(
                         Text(text = stringResource(id = R.string.people))
                     }
                 )
+                Row(horizontalArrangement = Arrangement.SpaceAround) {
+                    OutlinedTextField(
+                        value = minNoteSearch,
+                        onValueChange = {
+                            minNoteSearch = it
+                        },
+                        label = {
+                            Text(text = "Min note")
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth(fraction = 0.45f)
+                    )
+                    Spacer(modifier = Modifier.fillMaxWidth(fraction = (1f * 1f / 6f)))
+                    OutlinedTextField(
+                        value = maxNoteSearch,
+                        onValueChange = {
+                            maxNoteSearch = it
+                        },
+                        label = {
+                            Text(text = "Max note")
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        modifier = Modifier.fillMaxWidth(fraction = 1f)
+                    )
+                }
             }
         }
         )

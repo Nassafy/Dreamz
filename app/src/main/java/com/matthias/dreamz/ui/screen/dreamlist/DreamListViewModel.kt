@@ -87,6 +87,22 @@ class DreamListViewModel @Inject constructor(
         }
     }
 
+    val filterMinNote = filterDataStoreManager.minNote
+
+    fun setFilterMinNote(minNote: Int?) {
+        viewModelScope.launch {
+            filterDataStoreManager.setMinNote(minNote)
+        }
+    }
+
+    val filterMaxNote = filterDataStoreManager.maxNote
+
+    fun setFilterMaxNote(maxNote: Int?) {
+        viewModelScope.launch {
+            filterDataStoreManager.setMaxNote(maxNote)
+        }
+    }
+
     private fun isRefreshing(): LiveData<Boolean> {
         val source1 = workManager.getWorkInfosForUniqueWorkLiveData(SyncWorker.NAME_PERIODIC)
         val source2 = workManager.getWorkInfosForUniqueWorkLiveData(SyncWorker.NAME_UNIQUE)

@@ -79,6 +79,20 @@ class DreamRepository @Inject constructor(
                 }
             }
         }
+            .combine(filterManager.minNote) { dreams, minNote ->
+                dreams.filter { dreamDayWithDream ->
+                    minNote == null || dreamDayWithDream.dreams.any {
+                        it.dreamMetadata.note >= minNote
+                    }
+                }
+            }
+            .combine(filterManager.maxNote) { dreams, maxNote ->
+                dreams.filter { dreamDayWithDream ->
+                    maxNote == null || dreamDayWithDream.dreams.any {
+                        it.dreamMetadata.note <= maxNote
+                    }
+                }
+            }
     }
 
 
