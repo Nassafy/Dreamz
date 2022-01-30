@@ -1,6 +1,8 @@
 package com.matthias.dreamz.widget
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -26,12 +28,15 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.matthias.dreamz.repository.DreamRepository
+import com.matthias.dreamz.ui.screen.Screen
 import com.matthias.dreamz.widget.DreamzWidgetReceiver.Companion.updateWidgets
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -119,6 +124,33 @@ class UpdateActionCallback : ActionCallback {
     override suspend fun onRun(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
         coroutine.launch(Dispatchers.IO) {
             context.updateWidgets()
+        }
+    }
+}
+
+class TodayActionCallback : ActionCallback {
+    private val coroutine = MainScope()
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface DreamzWidgetEntryPoint {
+        fun dreamRepository(): DreamRepository
+    }
+
+    override suspend fun onRun(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
+        val entryPoint =
+            EntryPointAccessors.fromApplication(
+                context,
+                DreamzWidgetEntryPoint::class.java
+            )
+        val dreamRepository = entryPoint.dreamRepository()
+        coroutine.launch(Dispatchers.IO) {
+            val todayDream = dreamRepository.getTodayDreamDay().first()
+            val dreamId = todayDream?.uid ?: 0
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.data = Uri.parse(Screen.EditDream.createDeepLink(dreamId))
+            context.startActivity(intent)
         }
     }
 }

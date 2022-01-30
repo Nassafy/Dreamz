@@ -9,8 +9,14 @@ sealed class Screen(val route: String) {
     }
 
     object EditDream : Screen("editdream/{dreamId}") {
+        val deepLinkUri = "dreamz://edit/{dreamId}"
+
         fun createRoute(dreamId: Long): String {
             return "editdream/$dreamId"
+        }
+
+        fun createDeepLink(dreamId: Long): String {
+            return "dreamz://edit/$dreamId"
         }
     }
 
