@@ -93,6 +93,11 @@ class DreamRepository @Inject constructor(
                     }
                 }
             }
+            .combine(filterManager.lucid) { dreams, lucid ->
+                dreams.filter { dreamDayWithDream ->
+                    lucid == null || !lucid || dreamDayWithDream.dreams.any { it.dreamMetadata.lucid }
+                }
+            }
     }
 
 

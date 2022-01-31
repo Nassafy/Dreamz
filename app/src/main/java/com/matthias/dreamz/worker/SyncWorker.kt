@@ -8,6 +8,7 @@ import com.matthias.dreamz.datastore.FlagDataStoreManager
 import com.matthias.dreamz.repository.AuthRepository
 import com.matthias.dreamz.repository.DreamRepository
 import com.matthias.dreamz.repository.TagInfoRepository
+import com.matthias.dreamz.widget.DreamzWidgetReceiver.Companion.updateWidgets
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
@@ -36,6 +37,7 @@ class SyncWorker @AssistedInject constructor(
             flagDataStoreManager.setSyncState(false)
             return Result.failure()
         }
+        context.updateWidgets()
         return Result.success()
     }
 

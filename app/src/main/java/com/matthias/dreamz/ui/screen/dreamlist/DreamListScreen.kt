@@ -54,6 +54,7 @@ fun DreamsListScreen(
     val filterPeople = dreamListViewModel.filterPeople.collectAsState(initial = "").value
     val minNote = dreamListViewModel.filterMinNote.collectAsState(initial = null).value
     val maxNote = dreamListViewModel.filterMaxNote.collectAsState(initial = null).value
+    val lucid = dreamListViewModel.lucid.collectAsState(initial = false).value
 
     val syncState = dreamListViewModel.syncState.collectAsState(initial = true).value
 
@@ -76,6 +77,8 @@ fun DreamsListScreen(
                     setMinNote = { dreamListViewModel.setFilterMinNote(it) },
                     maxNote = maxNote,
                     setMaxNote = { dreamListViewModel.setFilterMaxNote(it) },
+                    lucid = lucid,
+                    setLucid = { dreamListViewModel.setLucid(it) },
                     peoples = peoples,
                 )
                 if (dreamDays != null && dreamDays.isEmpty()) {

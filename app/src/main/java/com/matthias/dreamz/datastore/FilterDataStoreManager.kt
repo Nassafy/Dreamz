@@ -2,10 +2,7 @@ package com.matthias.dreamz.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +16,7 @@ class FilterDataStoreManager(@ApplicationContext val context: Context) {
     private val peopleKey = stringPreferencesKey("people")
     private val minNoteKey = intPreferencesKey("minNote")
     private val maxNoteKey = intPreferencesKey("maxNote")
+    private val lucidKey = booleanPreferencesKey("lucid")
 
     val text: Flow<String?> = context.filtersDataStore.data.map { it[textKey] }
 
@@ -65,6 +63,14 @@ class FilterDataStoreManager(@ApplicationContext val context: Context) {
             } else {
                 filter.remove(maxNoteKey)
             }
+        }
+    }
+
+    val lucid: Flow<Boolean?> = context.filtersDataStore.data.map { it[lucidKey] }
+
+    suspend fun setLucid(lucid: Boolean) {
+        context.filtersDataStore.edit { filter ->
+            filter[lucidKey] = lucid
         }
     }
 

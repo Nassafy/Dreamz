@@ -34,6 +34,8 @@ fun DreamSearch(
     setMinNote: (Int?) -> Unit,
     maxNote: Int?,
     setMaxNote: (Int?) -> Unit,
+    lucid: Boolean?,
+    setLucid: (Boolean) -> Unit,
     peoples: List<String>
 ) {
     var openTextSearchDialog by rememberSaveable {
@@ -62,6 +64,10 @@ fun DreamSearch(
         mutableStateOf(
             maxNote?.toString() ?: ""
         )
+    }
+
+    var lucidSearch by rememberSaveable {
+        mutableStateOf(lucid ?: false)
     }
 
     if (filterText?.isNotBlank() == true) {
@@ -131,6 +137,20 @@ fun DreamSearch(
             }
         }
     }
+
+    if (lucid != null && lucid) {
+        Chip {
+            Row {
+                Text(text = "LD")
+                Icon(
+                    Icons.Default.Close,
+                    contentDescription = "Delete",
+                    modifier = Modifier.clickable {
+                        setLucid(false)
+                    })
+            }
+        }
+    }
     IconButton(onClick = { openTextSearchDialog = true }) {
         Icon(Icons.Default.Search, contentDescription = "Search")
     }
@@ -141,7 +161,6 @@ fun DreamSearch(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 TextButton(onClick = {
                     setFilterText(textSearch)
@@ -149,18 +168,22 @@ fun DreamSearch(
                     setFilterPeople(peopleSearch)
                     setMinNote(minNoteSearch.toIntOrNull())
                     setMaxNote(maxNoteSearch.toIntOrNull())
+                    setLucid(lucidSearch)
                     textSearch = ""
                     tagSearch = ""
                     peopleSearch = ""
                     minNoteSearch = ""
                     maxNoteSearch = ""
                     openTextSearchDialog = false
+                    lucidSearch = false
                 }) {
                     Text(stringResource(id = R.string.search))
                 }
             }
         }, text = {
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 OutlinedTextField(value = textSearch, onValueChange = { textSearch = it }, label = {
                     Text(
                         text = stringResource(id = R.string.search)
@@ -208,6 +231,13 @@ fun DreamSearch(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         modifier = Modifier.fillMaxWidth(fraction = 1f)
                     )
+                }
+                Row {
+                    Checkbox(
+                        checked = lucidSearch,
+                        onCheckedChange = { lucidSearch = !lucidSearch })
+                    // TODO trad
+                    Text(text = "Lucid")
                 }
             }
         }
