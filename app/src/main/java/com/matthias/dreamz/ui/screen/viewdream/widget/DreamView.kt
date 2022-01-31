@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.flowlayout.FlowRow
 import com.matthias.dreamz.R
 import com.matthias.dreamz.data.model.DreamMetadata
@@ -34,6 +36,7 @@ import com.matthias.dreamz.ui.screen.viewdream.DreamState
 import com.matthias.dreamz.ui.widget.AutocompleteTextField
 
 
+@ExperimentalComposeUiApi
 @Composable
 fun DreamView(
     dream: DreamState,
@@ -89,7 +92,8 @@ fun DreamView(
                 onDeleteTag = {
                     saveMetadata(dream.metadata.copy(tags = dream.metadata.tags - it))
                 },
-                suggestions = tagsSuggestions
+                suggestions = tagsSuggestions,
+                dialogName = stringResource(id = R.string.tags)
             )
             TagRow(
                 icon = Icons.Default.People,
@@ -101,12 +105,14 @@ fun DreamView(
                 onDeleteTag = {
                     saveMetadata(dream.metadata.copy(peoples = dream.metadata.peoples - it))
                 },
-                suggestions = peoplesSuggestions
+                suggestions = peoplesSuggestions,
+                dialogName = stringResource(id = R.string.peoples)
             )
         }
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun TagRow(
     icon: ImageVector,
@@ -114,7 +120,8 @@ fun TagRow(
     contentDescription: String,
     onAddTag: (tag: String) -> Unit,
     onDeleteTag: (tag: String) -> Unit,
-    suggestions: List<String>
+    suggestions: List<String>,
+    dialogName: String
 ) {
     val showTagAlertDialog = rememberSaveable {
         mutableStateOf(false)
@@ -125,50 +132,65 @@ fun TagRow(
     }
 
     if (showTagAlertDialog.value) {
-        AlertDialog(onDismissRequest = { showTagAlertDialog.value = false }, buttons = {
-            Column {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp), horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    AutocompleteTextField(
-                        text = tag.value,
-                        onChangeText = {
-                            tag.value = it
-                        },
-                        suggestions = suggestions,
-                        onSelectSuggestion = {
-                            tag.value = ""
-                            onAddTag(it)
-                        })
-                    FlowRow {
-                        tags.forEach {
-                            Chip {
-                                Row {
-                                    Text(it)
-                                    Spacer(modifier = Modifier.width(10.dp))
-                                    Icon(
-                                        Icons.Default.Close,
-                                        contentDescription = stringResource(id = R.string.delete),
-                                        modifier = Modifier.clickable {
-                                            onDeleteTag(it)
-                                        })
+        AlertDialog(
+            onDismissRequest = { showTagAlertDialog.value = false },
+            properties = DialogProperties(usePlatformDefaultWidth = false),
+            modifier = Modifier.padding(40.dp),
+            buttons = {
+                Column {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 5.dp), horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Icon(icon, contentDescription = contentDescription)
+                            Text(
+                                text = dialogName,
+                                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            )
+                        }
+                        AutocompleteTextField(
+                            text = tag.value,
+                            onChangeText = {
+                                tag.value = it
+                            },
+                            suggestions = suggestions,
+                            onSelectSuggestion = {
+                                tag.value = ""
+                                onAddTag(it)
+                            })
+                        FlowRow {
+                            tags.forEach {
+                                Chip {
+                                    Row {
+                                        Text(it)
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Icon(
+                                            Icons.Default.Close,
+                                            contentDescription = stringResource(id = R.string.delete),
+                                            modifier = Modifier.clickable {
+                                                onDeleteTag(it)
+                                            })
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()) {
-                    TextButton(onClick = {
-                        onAddTag(tag.value)
-                        showTagAlertDialog.value = false
-                    }) {
-                        Text(stringResource(id = R.string.add))
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        TextButton(onClick = {
+                            onAddTag(tag.value)
+                            tag.value = ""
+                        }) {
+                            Text(stringResource(id = R.string.add))
+                        }
                     }
                 }
-            }
-        })
+            })
     }
     FlowRow {
         Chip(modifier = Modifier.clickable {

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.matthias.dreamz.ui.screen.dreamlist.DreamDayState
@@ -42,7 +43,11 @@ fun DreamCard(dreamDay: DreamDayState, modifier: Modifier = Modifier) {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                         ) {
-                            Text(it.name)
+                            Text(
+                                it.name,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f)
+                            )
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
@@ -52,7 +57,7 @@ fun DreamCard(dreamDay: DreamDayState, modifier: Modifier = Modifier) {
                                         style = TextStyle(
                                             color = MaterialTheme.colors.primary,
                                             fontWeight = FontWeight.SemiBold
-                                        )
+                                        ),
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(15.dp))
