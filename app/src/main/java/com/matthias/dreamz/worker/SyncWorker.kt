@@ -1,9 +1,11 @@
 package com.matthias.dreamz.worker
 
+import android.app.Notification
 import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
+import com.matthias.dreamz.R
 import com.matthias.dreamz.datastore.FlagDataStoreManager
 import com.matthias.dreamz.repository.AuthRepository
 import com.matthias.dreamz.repository.DreamRepository
@@ -16,13 +18,15 @@ import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
-        @Assisted private val context: Context,
-        @Assisted workerParameters: WorkerParameters,
-        private val dreamRepository: DreamRepository,
-        private val tagInfoRepository: TagInfoRepository,
-        private val authRepository: AuthRepository,
-        private val flagDataStoreManager: FlagDataStoreManager
+    @Assisted private val context: Context,
+    @Assisted workerParameters: WorkerParameters,
+    private val dreamRepository: DreamRepository,
+    private val tagInfoRepository: TagInfoRepository,
+    private val authRepository: AuthRepository,
+    private val flagDataStoreManager: FlagDataStoreManager
 ) : CoroutineWorker(context, workerParameters) {
+    private val CHANNEL_ID = "dreamz_sync_notif"
+
     override suspend fun doWork(): Result {
         try {
             val logged = authRepository.logged.first()
@@ -48,19 +52,27 @@ class SyncWorker @AssistedInject constructor(
 
         private fun workRequest(): PeriodicWorkRequest {
             val constraints =
-                    Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
             return PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS).setConstraints(
-                    constraints
+                constraints
             )
-                    .build()
+                .build()
         }
 
         fun launch(workManager: WorkManager): Operation {
             return workManager.enqueueUniquePeriodicWork(
-                    NAME_PERIODIC,
-                    ExistingPeriodicWorkPolicy.KEEP,
-                    workRequest()
+                NAME_PERIODIC,
+                ExistingPeriodicWorkPolicy.KEEP,
+                workRequest()
             )
         }
+    }
+
+    override suspend fun getForegroundInfo(): ForegroundInfo {
+        val notificationId = 0
+        val notification =
+            Notification.Builder(context, CHANNEL_ID).setContentText(context.getText(R.string.sync))
+                .setSmallIcon(R.drawable.ic_launcher_foreground).build()
+        return ForegroundInfo(notificationId, notification)
     }
 }

@@ -17,7 +17,7 @@ interface DreamDayDao {
     @Query("select * from DreamDay where date >= :dateA and date < :dateB ")
     fun getDreamDayByDate(dateA: Long, dateB: Long): Flow<DreamDay>
 
-    @Query("select * from DreamDay where date > :dateA and date < :dateB ")
+    @Query("select * from DreamDay where date >= :dateA and date <= :dateB ")
     fun getDreamDaysByDate(dateA: Long, dateB: Long): Flow<List<DreamDay>>
 
     @Query("select count() from DreamDay")

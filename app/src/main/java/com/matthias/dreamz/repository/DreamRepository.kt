@@ -39,9 +39,9 @@ class DreamRepository @Inject constructor(
     }
 
     fun getDreamDayByDate(start: LocalDate, end: LocalDate): Flow<List<DreamDay>> {
-        val startEpoch = start.atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
+        val startEpoch = start.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
         val endEpoch =
-            end.plusDays(1).atStartOfDay().toInstant(OffsetDateTime.now().offset).toEpochMilli()
+            end.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
         return dreamDayDao.getDreamDaysByDate(startEpoch, endEpoch)
     }
 

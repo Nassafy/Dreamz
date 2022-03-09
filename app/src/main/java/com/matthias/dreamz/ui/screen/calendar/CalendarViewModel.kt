@@ -13,8 +13,8 @@ import javax.inject.Inject
 class CalendarViewModel @Inject constructor(private val dreamRepository: DreamRepository) :
     ViewModel() {
     fun getDreams(year: Int, month: Int): Flow<HashMap<LocalDate, DreamDay>> {
-        val start = LocalDate.of(year, month, 1)
-        val end = LocalDate.of(year, month, 1).plusMonths(1)
+        val start = LocalDate.of(year, month, 1).minusDays(1)
+        val end = LocalDate.of(year, month, 1).plusMonths(1).minusDays(1)
         return dreamRepository.getDreamDayByDate(start, end).map { dreamDays ->
             val hash = hashMapOf<LocalDate, DreamDay>()
             dreamDays.forEach {
