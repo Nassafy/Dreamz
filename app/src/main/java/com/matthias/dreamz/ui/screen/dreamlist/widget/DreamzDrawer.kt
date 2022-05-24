@@ -3,10 +3,7 @@ package com.matthias.dreamz.ui.screen.dreamlist.widget
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Leaderboard
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.Tag
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -52,6 +49,13 @@ fun DreamzDrawer(navController: NavController, drawerState: DrawerState) {
             route = Screen.Graph.route,
             name = stringResource(id = R.string.graphs),
             icon = Icons.Default.Leaderboard,
+            navController = navController,
+            drawerState = drawerState
+        )
+        DrawerElem(
+            route = Screen.Setting.route,
+            name = stringResource(id = R.string.setting),
+            icon = Icons.Default.Settings,
             navController = navController,
             drawerState = drawerState
         )

@@ -23,11 +23,17 @@ class AuthRepository @Inject constructor(
             val resp = authApi.auth(AuthDto(username = username, password = password)).await()
             val jwt = resp.string()
             authDataStoreManager.writeJwtToken(jwtToken = jwt)
+            authDataStoreManager.writeOnlineMode(true)
             true
         } catch (httpException: HttpException) {
             false
         }
 
+    }
+
+    suspend fun logout() {
+        authDataStoreManager.removeJwtToken()
+        authDataStoreManager.writeOnlineMode(false)
     }
 
 }

@@ -33,4 +33,6 @@
     <string name="login_error">Login error</string>
     <string name="dreamz_widget_description">Dreamz widget</string>
     <string name="dreamz_widget_text">Dream this week</string>
+    <string name="logout">Logout</string>
+    <string name="setting">Settings</string>
 </resources>

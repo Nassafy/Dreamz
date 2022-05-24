@@ -35,7 +35,6 @@ class NetworkModule {
     @Singleton
     fun provideOkHttpClient(
             settingsDataStoreManager: SettingsDataStoreManager,
-            @ApplicationContext context: Context
     ): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor {
@@ -123,10 +122,11 @@ private class InstantAdapter : TypeAdapter<Instant?>() {
         } else {
             val dateStr = jsonReader.nextString()
             val format =
-                    if (dateStr.length == 20)
-                        "yyyy-MM-dd'T'HH:mm:ss'Z'"
-                    else
-                        "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                when (dateStr.length) {
+                    20 -> "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                    22 -> "yyyy-MM-dd'T'HH:mm:ss.S'Z'"
+                    else -> "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                }
 
             LocalDateTime.parse(
                     dateStr, DateTimeFormatter.ofPattern(format)

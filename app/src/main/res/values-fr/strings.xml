@@ -33,4 +33,6 @@
     <string name="login_error">Erreur de connection</string>
     <string name="dreamz_widget_description">Dreamz widget</string>
     <string name="dreamz_widget_text">Rêves de la semaine</string>
+    <string name="logout">Déconnexion</string>
+    <string name="setting">Paramètres</string>
 </resources>

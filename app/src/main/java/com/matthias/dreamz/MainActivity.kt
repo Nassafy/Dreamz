@@ -1,5 +1,6 @@
 package com.matthias.dreamz
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,6 +35,8 @@ import com.matthias.dreamz.ui.screen.graph.GraphScreen
 import com.matthias.dreamz.ui.screen.graph.GraphViewModel
 import com.matthias.dreamz.ui.screen.login.LoginScreen
 import com.matthias.dreamz.ui.screen.login.LoginViewModel
+import com.matthias.dreamz.ui.screen.settings.SettingScreen
+import com.matthias.dreamz.ui.screen.settings.SettingViewModel
 import com.matthias.dreamz.ui.screen.tags.TagsScreen
 import com.matthias.dreamz.ui.screen.tags.TagsViewModel
 import com.matthias.dreamz.ui.screen.viewdream.ViewDreamScreen
@@ -49,7 +52,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.statusBarColor = getColor(android.R.color.system_accent1_500)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.statusBarColor = getColor(android.R.color.system_accent1_500)
+        }
         setContent {
             val mainViewModel = hiltViewModel<MainViewModel>()
             val logged = mainViewModel.logged.collectAsState(initial = true).value
@@ -91,7 +96,9 @@ class MainActivity : ComponentActivity() {
                                 arguments = listOf(navArgument("dreamId") {
                                     type = NavType.LongType
                                 }),
-                                deepLink = listOf(navDeepLink { uriPattern="dreamz://edit/{dreamId}" })
+                                deepLink = listOf(navDeepLink {
+                                    uriPattern = "dreamz://edit/{dreamId}"
+                                })
                             ) {
                                 val editDreamViewModel: EditDreamViewModel = hiltViewModel()
                                 val dreamDayId = it.arguments?.getLong("dreamId")
@@ -137,6 +144,13 @@ class MainActivity : ComponentActivity() {
                                 LoginScreen(
                                     loginViewModel = loginViewModel,
                                     navController = navController
+                                )
+                            }
+                            dreamzComposable(Screen.Setting.route) {
+                                val settingViewModel: SettingViewModel = hiltViewModel()
+                                SettingScreen(
+                                    navController = navController,
+                                    settingViewModel = settingViewModel
                                 )
                             }
 
