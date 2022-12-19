@@ -3,11 +3,8 @@ package com.matthias.dreamz.widget
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.Preferences
@@ -19,6 +16,7 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.layout.*
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
@@ -57,7 +55,7 @@ class DreamzWidget() : GlanceAppWidget() {
         val dates = prefs[datesPreferenceKey] ?: setOf()
 
         Box(
-            modifier = GlanceModifier.background(Color.DarkGray).clickable(
+            modifier = GlanceModifier.cornerRadius(8.dp).background(Color.DarkGray).clickable(
                 onClick = actionRunCallback<UpdateActionCallback>()
             ),
         ) {
@@ -100,8 +98,11 @@ class DreamzWidget() : GlanceAppWidget() {
                 val style = if (dates.contains(dayDate)) TextStyle(
                     fontWeight = FontWeight.Bold,
                     color = ColorProvider(Color(0xFFEF6C00)),
-                    fontSize = 10.sp
-                ) else TextStyle(fontSize = 12.sp)
+                    fontSize = 12.sp
+                ) else TextStyle(
+                    fontSize = 10.sp,
+                    color = ColorProvider(Color(0xFFFFFFFF))
+                )
                 Text(text = day, modifier = GlanceModifier.padding(2.dp), style = style)
             }
         }
